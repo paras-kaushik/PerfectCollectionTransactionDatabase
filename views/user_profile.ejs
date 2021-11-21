@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="/css/user_profile.css" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>jQuery UI Datepicker - Default functionality</title>
+  <link
+    rel="stylesheet"
+    href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"
+  />
+
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+  <script>
+    document.addEventListener(
+      "keyup",
+      (event) => {
+        var name = event.key;
+        var code = event.code;
+
+        if (name == "z" || name == "Z") {
+          document.getElementById("myButton").click();
+        }
+      },
+      false
+    );
+  </script>
+</head>
+<body>
+  <!-- <p>Date: <input type="text" id="datepicker" /></p> -->
+  <!-- <button id="go" type="button" class="btn btn-danger">GO</button> -->
+  <button
+    onclick="location.href = '/';"
+    id="myButton"
+    class="float-left submit-button"
+  >
+    BACK
+  </button>
+  <p>Press Z to jump back</p>
+  <div id="posts-list-container">
+    <table>
+      <tr>
+        <th>Time</th>
+        <th>Rough estimate Number</th>
+        <th>Net Price</th>
+        <th>Items</th>
+      </tr>
+      <% for(transaction of transactions){ %>
+      <tr>
+        <td><%=moment(transaction.createdAt).format('DD-MM-YYYY: hh:mm')%></td>
+        <td><%=transaction.transactionNumber%></td>
+        <td><%=transaction.netPrice%></td>
+        <td>
+          <% for(purc of transaction.purchases) {%>
+          <li><%=purc.itemName%> <%=purc.itemQuantity%></li>
+          <%} %>
+        </td>
+      </tr>
+      <%} %>
+    </table>
+  </div>
+</body>
