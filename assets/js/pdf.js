@@ -123,6 +123,8 @@ window.onload = function () {
     } else {
       completeTransactionJson["transactionType"] = "CASH";
     }
+    completeTransactionJson["remarks"] =
+      document.getElementById("wild-input").value;
 
     keypads.remove();
     window.print();

@@ -44,6 +44,7 @@
         <th>Net Price</th>
         <th>Items</th>
         <th>Transaction Type</th>
+        <th>Info</th>
       </tr>
       <% for(transaction of transactions){ %>
       <tr>
@@ -56,6 +57,7 @@
           <%} %>
         </td>
         <td><%=transaction.transactionType%></td>
+        <td><%=transaction.remarks%></td>
       </tr>
       <%} %>
     </table>
