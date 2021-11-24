@@ -53,7 +53,9 @@
         <td><%=transaction.netPrice%></td>
         <td>
           <% for(purc of transaction.purchases) {%>
-          <li><%=purc.itemName%> <%=purc.itemQuantity%></li>
+          <li>
+            <%=purc.itemName%> <%=purc.itemQuantity%> <%=purc.itemTotalPrice%>
+          </li>
           <%} %>
         </td>
         <td><%=transaction.transactionType%></td>
