@@ -299,11 +299,21 @@ function additemNumberToList() {
   increaseTotalItemsCount();
   updatePageTotals();
 }
-
+function removeNode(id) {
+  return completeTransactionJson["purchases"].filter(function (emp) {
+    if (emp.itemNumber == id) {
+      return false;
+    }
+    return true;
+  });
+}
 function handleDelete(event) {
   var changedId = event.target.parentNode.parentNode.id;
   console.log(changedId);
+  console.log("->>>>", JSON.stringify(completeTransactionJson["purchases"]));
   document.getElementById(changedId).remove();
+  completeTransactionJson["purchases"] = removeNode(changedId);
+  console.log("->>>>", JSON.stringify(completeTransactionJson["purchases"]));
   increaseTotalItemsCount();
   updatePageTotals();
 }
