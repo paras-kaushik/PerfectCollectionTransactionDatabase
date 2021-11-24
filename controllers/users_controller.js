@@ -6,6 +6,14 @@ module.exports.profile = function (req, res) {
   Transaction.aggregate(
     [
       {
+        $match: {
+          createdAt: {
+            $gte: today.toDate(),
+            $lte: moment(today).endOf("day").toDate(),
+          },
+        },
+      },
+      {
         $group: {
           _id: "",
           total: {
