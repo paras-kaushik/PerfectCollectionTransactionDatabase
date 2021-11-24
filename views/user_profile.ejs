@@ -43,6 +43,7 @@
         <th>Rough estimate Number</th>
         <th>Net Price</th>
         <th>Items</th>
+        <th>Transaction Type</th>
       </tr>
       <% for(transaction of transactions){ %>
       <tr>
@@ -54,6 +55,7 @@
           <li><%=purc.itemName%> <%=purc.itemQuantity%></li>
           <%} %>
         </td>
+        <td><%=transaction.transactionType%></td>
       </tr>
       <%} %>
     </table>

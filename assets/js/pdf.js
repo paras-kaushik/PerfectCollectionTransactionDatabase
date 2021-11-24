@@ -30,6 +30,13 @@ function resetMySale() {
 }
 window.onload = function () {
   $(function () {
+    $("div.hindi").hide(); // hide it initially
+    $("#ttb").on("click", function () {
+      $("div.english, div.hindi").toggle();
+    });
+  });
+
+  $(function () {
     $("#datepicker").datepicker({
       dateFormat: "yy-mm-dd",
     }).val = "1";
@@ -110,6 +117,13 @@ window.onload = function () {
     console.log("------->>> ", invoice);
     var keypads = document.getElementById("input-and-mapping-containing-div");
 
+    // completeTransactionJson["transactionType"]
+    if (document.getElementsByClassName("hindi")[0].style.display === "none") {
+      completeTransactionJson["transactionType"] = "CARD/DIGITAL";
+    } else {
+      completeTransactionJson["transactionType"] = "CASH";
+    }
+
     keypads.remove();
     window.print();
     window.location.reload();
@@ -172,6 +186,9 @@ window.onload = function () {
 
       if (name == "z" || name == "Z") {
         document.getElementById("tbtn").click();
+      }
+      if (name == "c" || name == "C") {
+        document.getElementById("ttb").click();
       }
     },
     false

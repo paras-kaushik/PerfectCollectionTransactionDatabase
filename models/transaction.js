@@ -11,6 +11,9 @@ const transactionSchema = new mongoose.Schema(
       // customer name if possible
       type: String,
     },
+    transactionType: {
+      type: String,
+    },
     purchases: [
       {
         itemNumber: {
