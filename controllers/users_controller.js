@@ -23,7 +23,6 @@ module.exports.profile = function (req, res) {
       },
     ],
     function (err, obj) {
-      console.log("***************************************", err, obj[0].total);
       if (obj && obj[0]) todaysSale = obj[0].total;
     }
   );
