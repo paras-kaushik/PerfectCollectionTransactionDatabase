@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/month.css" />
+  </head>
+  <body>
+    <!-- <div id="month-list-container">
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Sale</th>
+        </tr>
+        <% for(transaction of transactions){ %>
+        <tr>
+          <td><%=moment(transaction._id).format('DD-MM-YYYY')%></td>
+          <td><%=transaction.sum%></td>
+        </tr>
+        <%} %>
+      </table>
+    </div> -->
+    <canvas id="myChart" width="1000" height="400"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script>
+      const ctx = document.getElementById("myChart").getContext("2d");
+
+      //----------------------------------------------------------------------
+      let transactionsSum =
+        "<%-transactions.map((transaction)=>transaction.sum)%>";
+      // console.log(typeof transactionsSum);
+      //console.log(transactionsSum);
+      var finalarr = transactionsSum.split(",").map(Number);
+      console.log(finalarr);
+      //----------------------------------------------------------------------
+      let transactionslabel =
+        "<%-transactions.map((transaction)=>transaction._id)%>";
+      //console.log(typeof transactionslabel);
+      // console.log(transactionslabel);
+      var finaltransactionslabel = transactionslabel.split(",").map(String);
+      //console.log(finaltransactionslabel);
+
+      //----------------------------------------------------------------------
+      let transactionslabelday =
+        "<%-transactions.map((transaction)=>(moment(transaction._id)))%>";
+      console.log(transactionslabelday.split(","));
+      var finaltransactionslabelday = transactionslabelday
+        .split(",")
+        .map(
+          (daylabel) =>
+            daylabel.split(" ")[0] +
+            " " +
+            daylabel.split(" ")[1] +
+            " " +
+            daylabel.split(" ")[2] +
+            " " +
+            daylabel.split(" ")[3]
+        );
+      console.log("here");
+      console.log(finaltransactionslabelday);
+      //------------------------------------------
+      var myarr = [];
+      var ps = finaltransactionslabelday[0].split(" ")[0];
+      console.log(ps);
+
+      for (let i = 0; i < transactionslabelday.length; i++) {
+        if (finaltransactionslabelday[i]) {
+          var ps = finaltransactionslabelday[i].split(" ")[0];
+          if (ps === "Mon") {
+            myarr.push("blue");
+          } else if (ps == "Tue") {
+            myarr.push("black");
+          } else if (ps == "Wed") {
+            myarr.push("blue");
+          } else if (ps == "Thu") {
+            myarr.push("blue");
+          } else if (ps == "Fri") {
+            myarr.push("blue");
+          } else if (ps == "Sat") {
+            myarr.push("blue");
+          } else if (ps == "Sun") {
+            myarr.push("red");
+          }
+        }
+      }
+      const datasets = [
+        {
+          label: "Total Sale by day",
+          data: finalarr,
+          backgroundColor: myarr,
+          borderColor: "black",
+          borderWidth: 1,
+        },
+      ];
+      const myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: finaltransactionslabelday,
+          datasets,
+        },
+        options: {
+          tooltips: {
+            titleFontSize: 100,
+            bodyFontSize: 100,
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  autoSkip: true,
+                  fontSize: 20,
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 20,
+                },
+              },
+            ],
+          },
+          onClick: (e) => {
+            const activePoints = myChart.getElementsAtEventForMode(
+              e,
+              "nearest",
+              {
+                intersect: true,
+              },
+              false
+            );
+            const [{ index }] = activePoints;
+            console.log(e.target);
+
+            // console.log(datasets[0].data[index]);
+          },
+        },
+      });
+      document.getElementById("myChart").onclick = function (evt) {
+        var activePoints = myChart.getElementsAtEventForMode(
+          evt,
+          "point",
+          myChart.options
+        );
+        var firstPoint = activePoints[0];
+        var label = myChart.data.labels[firstPoint._index];
+        var value =
+          myChart.data.datasets[firstPoint._datasetIndex].data[
+            firstPoint._index
+          ];
+        alert(label + ": " + value);
+      };
+    </script>
+    <script>
+      document.onkeypress = function (e) {
+        e = e || window.event;
+        if (e.keyCode === 109 || e.keyCode === 77) {
+          location.href = "/";
+        }
+      };
+    </script>
+  </body>
+</html>

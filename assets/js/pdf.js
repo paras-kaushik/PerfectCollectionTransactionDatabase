@@ -31,8 +31,29 @@ function resetMySale() {
 window.onload = function () {
   $(function () {
     $("div.hindi").hide(); // hide it initially
+    $(".rough").hide();
+    document.body.style.background = "blue";
+    document.getElementsByClassName("actual")[0].style.background = "blue";
+    document.getElementsByClassName("actual")[0].style.color = "white";
     $("#ttb").on("click", function () {
       $("div.english, div.hindi").toggle();
+      if (
+        document.getElementsByClassName("rough")[0].style.display === "none"
+      ) {
+        document.getElementsByClassName("rough")[0].style.display = "block";
+        document.body.style.background = "green";
+        document.getElementsByClassName("rough")[0].style.background = "green";
+        document.getElementsByClassName("rough")[0].style.color = "white";
+        document.getElementsByClassName("actual")[0].style.display = "none";
+      } else if (
+        document.getElementsByClassName("rough")[0].style.display === "block"
+      ) {
+        document.getElementsByClassName("rough")[0].style.display = "none";
+        document.getElementsByClassName("actual")[0].style.display = "block";
+        document.getElementsByClassName("actual")[0].style.background = "blue";
+        document.getElementsByClassName("actual")[0].style.color = "white";
+        document.body.style.background = "blue";
+      }
     });
   });
 
@@ -57,7 +78,8 @@ window.onload = function () {
   // GET THE RECIPT NUMBER FROM LOCAL STORAGE
   localStorage.setItem("on_load_counter", n);
   localStorage.setItem("total_sale", m);
-  document.getElementById("lucky-draw-number").innerHTML = n;
+  document.getElementsByClassName("lucky-draw-number")[0].innerHTML = n;
+  document.getElementsByClassName("lucky-draw-number")[1].innerHTML = n;
   document.getElementById("nichod").innerHTML = m;
   document.getElementById("last-transaction").innerHTML =
     localStorage.getItem("ltrs");
@@ -191,6 +213,9 @@ window.onload = function () {
       }
       if (name == "c" || name == "C") {
         document.getElementById("ttb").click();
+      }
+      if (name == "m" || name == "M") {
+        location.href = "/users/month";
       }
     },
     false
