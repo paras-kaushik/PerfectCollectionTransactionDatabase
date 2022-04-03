@@ -44,7 +44,7 @@ module.exports.profile = async function (req, res) {
     });
 };
 module.exports.month = async function (req, res) {
-  var thirty_days_ago = moment().subtract(730, "days").toDate();
+  var thirty_days_ago = moment().subtract(30, "days").toDate();
 
   Transaction.aggregate([
     {
@@ -66,7 +66,7 @@ module.exports.month = async function (req, res) {
     .exec(function (err, transactions) {
       console.log(transactions);
       return res.render("month", {
-        title: "Last 730 days ",
+        title: "Last 30 days ",
         transactions: transactions,
         moment: moment,
       });
