@@ -161,3 +161,7 @@ body {
 .right {
   right: 0;
 }
+::placeholder {
+  /* Most modern browsers support this now. */
+  color: black;
+}

@@ -30,6 +30,9 @@ function resetMySale() {
 }
 window.onload = function () {
   $(function () {
+    document.getElementById("wild-input").style.background = "deeppink";
+    document.getElementById("wild-input").style.color = "white";
+
     $("div.hindi").hide(); // hide it initially
     $(".rough").hide();
     document.body.style.background = "blue";
@@ -227,6 +230,15 @@ window.onload = function () {
     false
   );
 };
+document.getElementById("wild-input").addEventListener("keyup", (e) => {
+  console.log("hi");
+  e.preventDefault();
+  var inputPair = document.querySelectorAll(".input-pair");
+  if (e.key === "Enter") {
+    document.getElementById("wild-input").disabled = true;
+    inputPair[0].focus();
+  }
+});
 
 function increaseTotalItemsCount() {
   // document.getElementById("page-total-items").innerText =
