@@ -139,6 +139,11 @@ window.onload = function () {
       "paget-total-netTotal"
     ).innerText;
     transactionSum = parseInt(transactionSum);
+
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = "TOTAL BILL AMOUNT " + " " + transactionSum;
+    window.speechSynthesis.speak(msg);
+
     var deleteButtons = document.getElementsByClassName("item-delete");
     for (var i = 0; i < deleteButtons.length; i++) {
       deleteButtons[i].style = "display: none";
@@ -160,6 +165,9 @@ window.onload = function () {
     keypads.remove();
     window.print();
     window.location.reload();
+    msg.text = "LAST BILLED AMOUNT " + " " + transactionSum;
+
+    window.speechSynthesis.speak(msg);
 
     var form = document.getElementById("new-transaction-form");
     form.completeTransactionJson.value = JSON.stringify(
@@ -333,9 +341,9 @@ function additemNumberToList() {
   newPurchase["itemQuantity"] = newItemQuantity;
   newPurchase["itemTotalPrice"] = newRowTotal;
   completeTransactionJson["purchases"].push(newPurchase);
-  // var msg = new SpeechSynthesisUtterance();
-  // msg.text = itemName + " " + newRowTotal;
-  // window.speechSynthesis.speak(msg);
+  var msg = new SpeechSynthesisUtterance();
+  msg.text = itemName + " " + newRowTotal;
+  window.speechSynthesis.speak(msg);
 
   document.getElementById("table-body").innerHTML += listItem;
   // increase total items count
