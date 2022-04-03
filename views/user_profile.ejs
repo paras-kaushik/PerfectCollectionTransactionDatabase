@@ -50,7 +50,10 @@
       </tr>
       <% for(transaction of transactions){ %>
       <tr>
-        <td><%=moment(transaction.createdAt).format('DD-MM-YYYY: hh:mm')%></td>
+        <td>
+          <%=moment(transaction.createdAt).add(19800,
+          'seconds').format('DD-MM-YYYY: hh:mm')%>
+        </td>
         <td><%=transaction.transactionNumber%></td>
         <td><%=transaction.netPrice%></td>
         <td>
