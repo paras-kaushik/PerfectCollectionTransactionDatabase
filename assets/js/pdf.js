@@ -34,6 +34,8 @@ window.onload = function () {
     $(".rough").hide();
     document.body.style.background = "blue";
     document.getElementsByClassName("actual")[0].style.background = "blue";
+    document.getElementsByClassName("english")[0].style.background = "blue";
+    document.getElementsByClassName("english")[0].style.color = "white";
     document.getElementsByClassName("actual")[0].style.color = "white";
     $("#ttb").on("click", function () {
       $("div.english, div.hindi").toggle();
@@ -44,6 +46,8 @@ window.onload = function () {
         document.body.style.background = "green";
         document.getElementsByClassName("rough")[0].style.background = "green";
         document.getElementsByClassName("rough")[0].style.color = "white";
+        document.getElementsByClassName("hindi")[0].style.background = "green";
+        document.getElementsByClassName("hindi")[0].style.color = "white";
         document.getElementsByClassName("actual")[0].style.display = "none";
       } else if (
         document.getElementsByClassName("rough")[0].style.display === "block"
@@ -52,6 +56,8 @@ window.onload = function () {
         document.getElementsByClassName("actual")[0].style.display = "block";
         document.getElementsByClassName("actual")[0].style.background = "blue";
         document.getElementsByClassName("actual")[0].style.color = "white";
+        document.getElementsByClassName("english")[0].style.background = "blue";
+        document.getElementsByClassName("english")[0].style.color = "white";
         document.body.style.background = "blue";
       }
     });
