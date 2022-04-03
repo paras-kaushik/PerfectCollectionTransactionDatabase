@@ -102,8 +102,12 @@
         },
         options: {
           tooltips: {
+            enabled: true,
             titleFontSize: 50,
             bodyFontSize: 50,
+          },
+          hover: {
+            animationDuration: 1,
           },
           scales: {
             xAxes: [
@@ -139,6 +143,32 @@
           },
         },
       });
+
+      Chart.pluginService.register({
+        afterDraw: function (chartInstance) {
+          var ctx = chartInstance.chart.ctx;
+
+          // render the value of the chart above the bar
+          ctx.font = Chart.helpers.fontString(
+            29,
+            "normal",
+            Chart.defaults.global.defaultFontFamily
+          );
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.backgroundColor = "black";
+          ctx.fillStyle = "black";
+
+          chartInstance.data.datasets.forEach(function (dataset) {
+            for (var i = 0; i < dataset.data.length; i++) {
+              var model =
+                dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model;
+              ctx.fillText(dataset.data[i], model.x, model.y - 2);
+            }
+          });
+        },
+      });
+
       document.getElementById("myChart").onclick = function (evt) {
         var activePoints = myChart.getElementsAtEventForMode(
           evt,
