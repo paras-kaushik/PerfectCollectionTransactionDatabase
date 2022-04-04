@@ -279,14 +279,16 @@ function updatePageTotals() {
 
   if (tot >= 0) {
     document.getElementById("page-total-sum").innerText = tot;
-    var sgst = (tot * 2.5) / 100;
-    document.getElementById("page-total-taxaddsgst").innerText = "+" + sgst;
-    document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
-    tot += 2 * sgst;
     var discount = tot / 10;
     document.getElementById("page-total-discountMinus").innerText =
       "-" + discount;
     tot = tot - discount;
+
+    var sgst = (tot * 2.5) / 100;
+    document.getElementById("page-total-taxaddsgst").innerText = "+" + sgst;
+    document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
+    tot += 2 * sgst;
+
     tot = Math.round(tot);
     document.getElementById("paget-total-netTotal").innerText = tot;
   }
