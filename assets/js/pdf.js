@@ -279,13 +279,19 @@ function updatePageTotals() {
 
   if (tot >= 0) {
     document.getElementById("page-total-sum").innerText = tot;
+    var sgst = (tot * 2.5) / 100;
+    document.getElementById("page-total-taxaddsgst").innerText = "+" + sgst;
+    document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
+    tot += 2 * sgst;
     var discount = tot / 10;
     document.getElementById("page-total-discountMinus").innerText =
       "-" + discount;
-    document.getElementById("paget-total-netTotal").innerText = tot - discount;
+    tot = tot - discount;
+    tot = Math.round(tot);
+    document.getElementById("paget-total-netTotal").innerText = tot;
   }
   completeTransactionJson["totalPrice"] = tot;
-  completeTransactionJson["netPrice"] = tot - discount;
+  completeTransactionJson["netPrice"] = tot;
 }
 function additemNumberToListOnEnter(event) {
   console.log(event.key);
