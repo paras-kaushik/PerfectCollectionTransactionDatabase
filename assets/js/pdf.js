@@ -284,10 +284,10 @@ function updatePageTotals() {
       "-" + discount;
     tot = tot - discount;
 
-    var sgst = (tot * 2.5) / 100;
-    document.getElementById("page-total-taxaddsgst").innerText = "+" + sgst;
-    document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
-    tot += 2 * sgst;
+    // var sgst = (tot * 2.5) / 100;
+    // document.getElementById("page-total-taxaddsgst").innerText = "+" + sgst;
+    // document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
+    // tot += 2 * sgst;
 
     tot = Math.round(tot);
     document.getElementById("paget-total-netTotal").innerText = tot;
