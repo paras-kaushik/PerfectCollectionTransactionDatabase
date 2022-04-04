@@ -22,7 +22,10 @@
         <%} %>
       </table>
     </div> -->
-    <canvas id="myChart" width="1000" height="400"></canvas>
+    <div style="padding: 1rem; margin-right: 10rem">
+      <canvas id="myChart" width="900" height="500"></canvas>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script>
       const ctx = document.getElementById("myChart").getContext("2d");
@@ -114,7 +117,7 @@
               {
                 ticks: {
                   autoSkip: false,
-                  fontSize: 30,
+                  fontSize: 15,
                   fontStyle: "bold",
                 },
               },
@@ -122,7 +125,7 @@
             yAxes: [
               {
                 ticks: {
-                  fontSize: 20,
+                  fontSize: 10,
                 },
               },
             ],
@@ -150,7 +153,7 @@
 
           // render the value of the chart above the bar
           ctx.font = Chart.helpers.fontString(
-            29,
+            20,
             "normal",
             Chart.defaults.global.defaultFontFamily
           );
