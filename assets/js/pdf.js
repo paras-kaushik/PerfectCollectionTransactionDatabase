@@ -270,6 +270,7 @@ function increaseTotalItemsCount() {
 function updatePageTotals() {
   //updating the page total
   var x = document.querySelectorAll("#table-body .item-total");
+  var y = document.querySelectorAll("#table-body .item-quantity");
   var tot = 0;
   var totabovethousand = 0;
   var totbelowthousand = 0;
@@ -280,8 +281,9 @@ function updatePageTotals() {
       break;
     }
     var thisinc = parseInt(x[i].innerText);
+    var thisqty = parseInt(y[i].innerText);
 
-    if (thisinc >= 1000) {
+    if (thisinc / thisqty >= 1000) {
       totabovethousand += thisinc;
     } else {
       totbelowthousand += thisinc;
