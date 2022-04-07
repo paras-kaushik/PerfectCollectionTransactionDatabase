@@ -36,10 +36,10 @@ window.onload = function () {
     $("div.hindi").hide(); // hide it initially
     $(".rough").hide();
     document.body.style.background = "blue";
-    document.getElementsByClassName("actual")[0].style.background = "blue";
+    document.getElementsByClassName("actual")[0].style.background = "#d5cdff";
     document.getElementsByClassName("english")[0].style.background = "blue";
     document.getElementsByClassName("english")[0].style.color = "white";
-    document.getElementsByClassName("actual")[0].style.color = "white";
+    document.getElementsByClassName("actual")[0].style.color = "black";
     $("#ttb").on("click", function () {
       $("div.english, div.hindi").toggle();
       if (
@@ -47,8 +47,9 @@ window.onload = function () {
       ) {
         document.getElementsByClassName("rough")[0].style.display = "block";
         document.body.style.background = "green";
-        document.getElementsByClassName("rough")[0].style.background = "green";
-        document.getElementsByClassName("rough")[0].style.color = "white";
+        document.getElementsByClassName("rough")[0].style.background =
+          "#b2d1b2";
+        document.getElementsByClassName("rough")[0].style.color = "black";
         document.getElementsByClassName("hindi")[0].style.background = "green";
         document.getElementsByClassName("hindi")[0].style.color = "white";
         document.getElementsByClassName("actual")[0].style.display = "none";
@@ -57,8 +58,9 @@ window.onload = function () {
       ) {
         document.getElementsByClassName("rough")[0].style.display = "none";
         document.getElementsByClassName("actual")[0].style.display = "block";
-        document.getElementsByClassName("actual")[0].style.background = "blue";
-        document.getElementsByClassName("actual")[0].style.color = "white";
+        document.getElementsByClassName("actual")[0].style.background =
+          "#d5cdff";
+        document.getElementsByClassName("actual")[0].style.color = "black";
         document.getElementsByClassName("english")[0].style.background = "blue";
         document.getElementsByClassName("english")[0].style.color = "white";
         document.body.style.background = "blue";
@@ -269,11 +271,22 @@ function updatePageTotals() {
   //updating the page total
   var x = document.querySelectorAll("#table-body .item-total");
   var tot = 0;
+  var totabovethousand = 0;
+  var totbelowthousand = 0;
+
   for (var i = 0; i < x.length; i++) {
     if (Number.isNaN(parseInt(x[i].innerText))) {
       tot = 0;
       break;
     }
+    var thisinc = parseInt(x[i].innerText);
+
+    if (thisinc >= 1000) {
+      totabovethousand += thisinc;
+    } else {
+      totbelowthousand += thisinc;
+    }
+
     tot += parseInt(x[i].innerText);
   }
 
@@ -288,6 +301,20 @@ function updatePageTotals() {
     // document.getElementById("page-total-taxaddsgst").innerText = "+" + sgst;
     // document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
     // tot += 2 * sgst;
+    if (totabovethousand > 0) {
+      var badagst = totabovethousand * 0.88 * 0.12;
+      var eachbada = badagst / 2;
+      eachbada = eachbada.toFixed(1);
+      document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
+      document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
+    }
+    if (totbelowthousand > 0) {
+      var chotagst = totbelowthousand * 0.95 * 0.05;
+      var eachchota = chotagst / 2;
+      eachchota = eachchota.toFixed(1);
+      document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
+      document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
+    }
 
     tot = Math.round(tot);
     document.getElementById("paget-total-netTotal").innerText = tot;

@@ -165,3 +165,20 @@ body {
   /* Most modern browsers support this now. */
   color: black;
 }
+.gstbox {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border: solid;
+  z-index: 1;
+}
+.gstbox div {
+  margin: 0 10px;
+}
+.abc {
+  display: flex;
+}
+.abc h5 {
+  margin-right: 10px;
+  font-size: 1.5rem;
+}
