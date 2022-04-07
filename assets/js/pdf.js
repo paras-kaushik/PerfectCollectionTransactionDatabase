@@ -304,13 +304,18 @@ function updatePageTotals() {
     // document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
     // tot += 2 * sgst;
     if (totabovethousand > 0) {
+      var discount_bada = totabovethousand / 10;
+      totabovethousand -= discount_bada;
       var badagst = totabovethousand * 0.88 * 0.12;
+
       var eachbada = badagst / 2;
       eachbada = eachbada.toFixed(1);
       document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
       document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
     }
     if (totbelowthousand > 0) {
+      var discount_chota = totbelowthousand / 10;
+      totbelowthousand -= discount_chota;
       var chotagst = totbelowthousand * 0.95 * 0.05;
       var eachchota = chotagst / 2;
       eachchota = eachchota.toFixed(1);
