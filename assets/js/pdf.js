@@ -109,11 +109,12 @@ window.onload = function () {
     ":" +
     currentdate.getSeconds();
 
-  // document.getElementById("page-date").innerText = datetime;
-  var today = new Date();
-  document.getElementById("page-date").value = today
-    .toISOString()
-    .substr(0, 10);
+  document.getElementById("page-date").innerText = datetime;
+  // var today = new Date();
+  // // dateFormat(today, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+  // document.getElementById("page-date").value = today
+  //   .toISOString()
+  //   .substr(0, 10);
   var inputPair = document.querySelectorAll(".input-pair");
   inputPair[0].addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
