@@ -117,7 +117,7 @@ module.exports.profile = async function (req, res) {
     });
 };
 module.exports.month = async function (req, res) {
-  var thirty_days_ago = moment().subtract(32, "days").toDate();
+  var thirty_days_ago = moment().subtract(366, "days").toDate();
 
   Transaction.aggregate([
     {
