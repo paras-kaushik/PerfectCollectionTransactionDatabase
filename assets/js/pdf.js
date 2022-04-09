@@ -310,7 +310,7 @@ function updatePageTotals() {
     if (totabovethousand > 0) {
       var discount_bada = totabovethousand / 10;
       totabovethousand -= discount_bada;
-      var badagst = totabovethousand * 0.88 * 0.12;
+      var badagst = totabovethousand * (12 / 112);
 
       var eachbada = badagst / 2;
       eachbada = eachbada.toFixed(1);
@@ -321,7 +321,7 @@ function updatePageTotals() {
     if (totbelowthousand > 0) {
       var discount_chota = totbelowthousand / 10;
       totbelowthousand -= discount_chota;
-      var chotagst = totbelowthousand * 0.95 * 0.05;
+      var chotagst = totbelowthousand * (5 / 105);
       var eachchota = chotagst / 2;
       eachchota = eachchota.toFixed(1);
       // document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
