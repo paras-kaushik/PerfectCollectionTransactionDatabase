@@ -14,7 +14,7 @@ module.exports.create = function (req, res) {
     myPurchases.push(ob);
   }
 
-  console.log(myPurchases);
+  console.log(x);
 
   Transaction.create(
     {
@@ -26,6 +26,8 @@ module.exports.create = function (req, res) {
       totalItems: parseInt(x.totalItems),
       totalPrice: parseInt(x.totalPrice),
       netPrice: parseInt(x.netPrice),
+      gstAsPerfive: x.gstAsPerfive ? parseFloat(x.gstAsPerfive) : 0,
+      gstAsPertwel: x.gstAsPertwel ? parseFloat(x.gstAsPertwel) : 0,
     },
     function (err, post) {
       if (err) {

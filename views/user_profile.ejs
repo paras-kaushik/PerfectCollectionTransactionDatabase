@@ -45,6 +45,10 @@
         <th>Net Price</th>
         <th>Items</th>
         <th>Transaction Type</th>
+        <th>CGST(2.5%)</th>
+        <th>SGST(2.5%)</th>
+        <th>CGST(6%)</th>
+        <th>SGST(6%)</th>
         <th>Info</th>
         <th>Delete</th>
       </tr>
@@ -64,6 +68,12 @@
           <%} %>
         </td>
         <td><%=transaction.transactionType%></td>
+
+        <td><%=((transaction.gstAsPerfive)/2).toFixed(2)%></td>
+        <td><%=((transaction.gstAsPerfive)/2).toFixed(2)%></td>
+        <td><%=((transaction.gstAsPertwel)/2).toFixed(2)%></td>
+        <td><%=((transaction.gstAsPertwel)/2).toFixed(2)%></td>
+
         <td><%=transaction.remarks%></td>
         <td>
           <a href="/users/pop/<%=transaction.id%>">Delete</a>

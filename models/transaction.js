@@ -49,6 +49,12 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    gstAsPerfive: {
+      type: Number,
+    },
+    gstAsPertwel: {
+      type: Number,
+    },
     netPrice: {
       type: Number,
       required: true,

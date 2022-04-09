@@ -316,6 +316,7 @@ function updatePageTotals() {
       eachbada = eachbada.toFixed(1);
       document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
       document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
+      completeTransactionJson["gstAsPertwel"] = badagst;
     }
     if (totbelowthousand > 0) {
       var discount_chota = totbelowthousand / 10;
@@ -325,6 +326,7 @@ function updatePageTotals() {
       eachchota = eachchota.toFixed(1);
       document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
       document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
+      completeTransactionJson["gstAsPerfive"] = chotagst;
     }
 
     tot = Math.round(tot);
