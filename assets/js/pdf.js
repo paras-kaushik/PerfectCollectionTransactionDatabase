@@ -314,8 +314,8 @@ function updatePageTotals() {
 
       var eachbada = badagst / 2;
       eachbada = eachbada.toFixed(1);
-      document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
-      document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
+      // document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
+      // document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
       completeTransactionJson["gstAsPertwel"] = badagst;
     }
     if (totbelowthousand > 0) {
@@ -324,8 +324,8 @@ function updatePageTotals() {
       var chotagst = totbelowthousand * 0.95 * 0.05;
       var eachchota = chotagst / 2;
       eachchota = eachchota.toFixed(1);
-      document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
-      document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
+      // document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
+      // document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
       completeTransactionJson["gstAsPerfive"] = chotagst;
     }
 
