@@ -23,20 +23,62 @@
       },
       false
     );
+    function myMount() {
+      const { protocol, host, pathname } = window.location;
+      console.log(pathname);
+      //alert(pathname.substr(15));
+
+      if (pathname.substr(15) === "") {
+        document.getElementById("table-date").value = new Date()
+          .toISOString()
+          .substr(0, 10);
+      } else {
+        document.getElementById("table-date").value = pathname.substr(15);
+      }
+    }
+    function datehandler(event) {
+      // alert(event.target.value);
+      var qd = event.target.value;
+      location.href = `/users/profile/${qd}`;
+    }
   </script>
 </head>
-<body>
+<body onload="myMount()">
   <!-- <p>Date: <input type="text" id="datepicker" /></p> -->
   <!-- <button id="go" type="button" class="btn btn-danger">GO</button> -->
+  <span style="margin-left: 3rem; display: block">Press Z to jump back</span>
+  <input
+    type="date"
+    style="font-size: 5rem; margin: 3rem"
+    id="table-date"
+    onchange="datehandler(event)"
+  />
+  <br />
   <button
     onclick="location.href = '/';"
     id="myButton"
     class="float-left submit-button"
+    style="display: none"
   >
     BACK
   </button>
-  <span style="margin-left: 3rem">Press Z to jump back</span>
-  <p>Todays total Sale <%=todaysSale%></p>
+
+  <div
+    style="
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      color: red;
+      border: solid;
+      font-weight: 1000;
+      background: floralwhite;
+    "
+  >
+    <p>Todays total Sale <%=todaysSale%></p>
+    <p>Todays total GST(5%) <%=todayschotagst%></p>
+    <p>Todays total GST(12%) <%=todaysbadagst%></p>
+  </div>
+
   <div id="posts-list-container">
     <table>
       <tr>

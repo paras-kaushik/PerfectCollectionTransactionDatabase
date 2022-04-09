@@ -111,7 +111,7 @@ window.onload = function () {
 
   document.getElementById("page-date").innerText = datetime;
   // var today = new Date();
-  // // dateFormat(today, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+
   // document.getElementById("page-date").value = today
   //   .toISOString()
   //   .substr(0, 10);

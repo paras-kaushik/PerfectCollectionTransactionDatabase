@@ -184,7 +184,16 @@
           myChart.data.datasets[firstPoint._datasetIndex].data[
             firstPoint._index
           ];
-        alert(label + ": " + value);
+        //  console.log(label + ":this is " + value);
+        //Thu Mar 17 2022
+        var conv = new Date(label);
+        //console.log(conv);
+        //console.log(conv.toLocaleString().split(",")[0]); //2022-03-16T18:30:00.000Z
+        // we need 2022-04-16
+        var temprep = conv.toLocaleString().split(",")[0].split("/");
+        var rep = temprep[2] + "-" + temprep[1] + "-" + temprep[0];
+
+        location.href = `/users/profile/${rep}`;
       };
     </script>
     <script>
