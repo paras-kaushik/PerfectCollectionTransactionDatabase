@@ -307,23 +307,38 @@ function updatePageTotals() {
     // document.getElementById("page-total-taxaddsgst").innerText = "+" + sgst;
     // document.getElementById("page-total-taxaddcgst").innerText = "+" + sgst;
     // tot += 2 * sgst;
+    var badagst = 0;
     if (totabovethousand > 0) {
       var discount_bada = totabovethousand / 10;
       totabovethousand -= discount_bada;
-      var badagst = totabovethousand * (12 / 112);
+      badagst = totabovethousand * (12 / 112);
 
-      var eachbada = badagst / 2;
-      eachbada = eachbada.toFixed(1);
+      // var eachbada = badagst / 2;
+      // eachbada = eachbada.toFixed(1);
+      // document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
+      // document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
+      completeTransactionJson["gstAsPertwel"] = badagst;
+    } else {
+      // var eachbada = badagst / 2;
+      // eachbada = eachbada.toFixed(1);
       // document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
       // document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
       completeTransactionJson["gstAsPertwel"] = badagst;
     }
+
+    var chotagst = 0;
     if (totbelowthousand > 0) {
       var discount_chota = totbelowthousand / 10;
       totbelowthousand -= discount_chota;
-      var chotagst = totbelowthousand * (5 / 105);
-      var eachchota = chotagst / 2;
-      eachchota = eachchota.toFixed(1);
+      chotagst = totbelowthousand * (5 / 105);
+      // var eachchota = chotagst / 2;
+      // eachchota = eachchota.toFixed(1);
+      // document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
+      // document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
+      completeTransactionJson["gstAsPerfive"] = chotagst;
+    } else {
+      // var eachchota = chotagst / 2;
+      // eachchota = eachchota.toFixed(1);
       // document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
       // document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
       completeTransactionJson["gstAsPerfive"] = chotagst;
