@@ -1,6 +1,6 @@
 const { json } = require("express");
 const Transaction = require("../models/transaction");
-
+var moment = require("moment");
 module.exports.create = function (req, res) {
   var x = JSON.parse(req.body.completeTransactionJson);
   var myPurchases = [];
@@ -13,7 +13,7 @@ module.exports.create = function (req, res) {
     ob["itemTotalPrice"] = x.purchases[i].itemTotalPrice;
     myPurchases.push(ob);
   }
-
+  console.log("papa");
   console.log(x);
 
   Transaction.create(
@@ -28,6 +28,7 @@ module.exports.create = function (req, res) {
       netPrice: parseInt(x.netPrice),
       gstAsPerfive: x.gstAsPerfive ? parseFloat(x.gstAsPerfive) : 0,
       gstAsPertwel: x.gstAsPertwel ? parseFloat(x.gstAsPertwel) : 0,
+      createdAt: moment(x.createdAt),
     },
     function (err, post) {
       if (err) {

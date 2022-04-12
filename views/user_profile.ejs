@@ -81,7 +81,7 @@
 
   <div id="posts-list-container">
     <table>
-      <tr>
+      <tr style="background: blue; color: white">
         <th>Time</th>
         <th>Number</th>
         <th>Net Price</th>
@@ -95,7 +95,7 @@
         <th>Delete</th>
       </tr>
       <% for(transaction of transactions){ %>
-      <tr>
+      <tr class="<%=transaction.transactionType.substring(0,3)%>">
         <td>
           <%=moment(transaction.createdAt).add(19800,
           'seconds').format('DD-MM-YYYY: hh:mm')%>
