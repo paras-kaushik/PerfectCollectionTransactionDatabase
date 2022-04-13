@@ -104,7 +104,7 @@ module.exports.profile = async function (req, res) {
       $lte: moment(today).endOf("day").toDate(),
     },
   })
-    .sort({ createdAt: "descending" })
+    .sort({ transactionNumber: "descending" })
     .exec(function (err, transactions) {
       return res.render("user_profile", {
         title: "User Profile",

@@ -75,8 +75,8 @@
     "
   >
     <p>Todays total Sale <%=todaysSale%></p>
-    <p>Todays total GST(5%) <%=todayschotagst%></p>
-    <p>Todays total GST(12%) <%=todaysbadagst%></p>
+    <p>Todays total GST(5%) <%=todayschotagst.toFixed(2)%></p>
+    <p>Todays total GST(12%) <%=todaysbadagst.toFixed(2)%></p>
   </div>
 
   <div id="posts-list-container">
@@ -98,7 +98,7 @@
       <tr class="<%=transaction.transactionType.substring(0,3)%>">
         <td>
           <%=moment(transaction.createdAt).add(19800,
-          'seconds').format('DD-MM-YYYY: hh:mm')%>
+          'seconds').format('DD-MM-YYYY')%>
         </td>
         <td><%=transaction.transactionNumber%></td>
         <td><%=transaction.netPrice%></td>
