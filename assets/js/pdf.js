@@ -6,15 +6,17 @@ const shopItems = {
   4: "Shorts",
   5: "T. Shirt",
   6: "Capri",
-  7: "Under G",
-  8: "Night Suit",
-  9: "Jacket",
-  10: "Thermal",
-  11: "Track Suit",
-  12: "Towel",
-  13: "Hankey",
-  14: "Socks",
-  15: "Dhoti",
+  7: "U.W",
+  8: "Vest",
+  9: "Panties",
+  10: "Night Suit",
+  11: "Jacket",
+  12: "Thermal",
+  13: "Track Suit",
+  14: "Towel",
+  15: "Hankey",
+  16: "Socks",
+  17: "Dhoti",
 };
 function resetMySale() {
   //alert("YES");
@@ -313,19 +315,24 @@ function updatePageTotals() {
     if (totabovethousand > 0) {
       var discount_bada = totabovethousand / 10;
       totabovethousand -= discount_bada;
-      badagst = totabovethousand * (12 / 112);
-
+      // badagst = totabovethousand * (12 / 112);
+      badagst = totabovethousand * (5 / 105);
       // var eachbada = badagst / 2;
       // eachbada = eachbada.toFixed(1);
       // document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
       // document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
-      completeTransactionJson["gstAsPertwel"] = badagst;
+      // completeTransactionJson["gstAsPertwel"] = badagst;
+      completeTransactionJson["gstAsPertwel"] = 0;
+      completeTransactionJson["gstAsPerfive"] = 0;
+      completeTransactionJson["gstAsPerfive"] += badagst;
     } else {
       // var eachbada = badagst / 2;
       // eachbada = eachbada.toFixed(1);
       // document.getElementsByClassName("bada-gst")[0].textContent = eachbada;
       // document.getElementsByClassName("bada-gst")[1].textContent = eachbada;
-      completeTransactionJson["gstAsPertwel"] = badagst;
+      // completeTransactionJson["gstAsPertwel"] = badagst;
+      completeTransactionJson["gstAsPerfive"] = 0;
+      completeTransactionJson["gstAsPertwel"] = 0;
     }
 
     var chotagst = 0;
@@ -337,13 +344,13 @@ function updatePageTotals() {
       // eachchota = eachchota.toFixed(1);
       // document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
       // document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
-      completeTransactionJson["gstAsPerfive"] = chotagst;
+      completeTransactionJson["gstAsPerfive"] += chotagst;
     } else {
       // var eachchota = chotagst / 2;
       // eachchota = eachchota.toFixed(1);
       // document.getElementsByClassName("chota-gst")[0].textContent = eachchota;
       // document.getElementsByClassName("chota-gst")[1].textContent = eachchota;
-      completeTransactionJson["gstAsPerfive"] = chotagst;
+      completeTransactionJson["gstAsPerfive"] += chotagst;
     }
 
     tot = Math.round(tot);

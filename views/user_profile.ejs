@@ -85,7 +85,7 @@
         <th>Time</th>
         <th>Number</th>
         <th>Net Price</th>
-        <th>Items</th>
+        <!-- <th>Items</th> -->
         <th>Transaction Type</th>
         <th>CGST(2.5%)</th>
         <th>SGST(2.5%)</th>
@@ -102,13 +102,13 @@
         </td>
         <td><%=transaction.transactionNumber%></td>
         <td><%=transaction.netPrice%></td>
-        <td>
+        <!-- <td>
           <% for(purc of transaction.purchases) {%>
           <li>
             <%=purc.itemName%> <%=purc.itemQuantity%> <%=purc.itemTotalPrice%>
           </li>
           <%} %>
-        </td>
+        </td> -->
         <td><%=transaction.transactionType%></td>
 
         <td><%=((transaction.gstAsPerfive)/2).toFixed(2)%></td>
