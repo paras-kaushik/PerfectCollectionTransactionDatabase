@@ -9,7 +9,7 @@ const shopItems = {
   7: "U.W",
   8: "Vest",
   9: "Panties",
-  10: "Night Suit",
+  10: "N.Suit",
   11: "Jacket",
   12: "Thermal",
   13: "Track Suit",
@@ -397,13 +397,13 @@ function additemNumberToList() {
   if (typeof itemName === "undefined") return;
 
   var listItem = `<tr id=${unqiueId} class="item-row">
-   <td> <span class="item-name">${itemName}</span> </td> 
-   <td> <span class="item-price">${newItemPrice}</span> </td> 
+   <td> <span class="item-name">${itemName}</span> </td>
+   <td> <span class="item-price">${newItemPrice}</span> </td>
    <td><span class="item-quantity">${newItemQuantity}</span></td>
-   <td> 
+   <td>
    <span class="font-weight-semibold item-total">${newRowTotal}</span>
-    <button class="item-delete btn btn-danger" class="item-delete" style="margin-left: 1rem" onclick="handleDelete(event)" > X </button> 
-    </td> 
+    <button class="item-delete btn btn-danger" class="item-delete" style="margin-left: 1rem" onclick="handleDelete(event)" > X </button>
+    </td>
     </tr>`;
 
   var newPurchase = {};
