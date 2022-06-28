@@ -282,12 +282,14 @@ window.onload = function () {
         document.getElementById("download").click();
 
       if (name == "z" || name == "Z") {
+        if(localStorage.getItem("shopname")=="one")
         document.getElementById("tbtn").click();
       }
       if (name == "c" || name == "C") {
         document.getElementById("ttb").click();
       }
       if (name == "m" || name == "M") {
+        if(localStorage.getItem("shopname")=="one")
         location.href = "/users/month";
       }
     },
