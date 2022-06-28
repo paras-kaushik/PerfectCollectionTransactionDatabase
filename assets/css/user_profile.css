@@ -16,3 +16,11 @@ td {
 .CAR {
   background: yellow;
 }
+#posts-list-container{
+  display: flex;
+  flex-direction: column;
+}
+.meri-table{
+  margin: 3rem;
+  background-color: aqua;
+}

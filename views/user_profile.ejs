@@ -27,6 +27,9 @@
       const { protocol, host, pathname } = window.location;
       console.log(pathname);
       //alert(pathname.substr(15));
+      if(localStorage.getItem("shopname")!="one"){
+        window.location.href="/";
+      }
 
       if (pathname.substr(15) === "") {
         document.getElementById("table-date").value = new Date()
@@ -80,7 +83,7 @@
   </div>
 
   <div id="posts-list-container">
-    <table style="margin: auto">
+    <table style="margin: auto" class="meri-table">
       <tr style="background: blue; color: white">
         <th>Time</th>
         <th>Number</th>
@@ -94,7 +97,7 @@
         <th>Info</th>
         <th>Delete</th>
       </tr>
-      <% for(transaction of transactions){ %>
+      <% for(transaction of transactions.filter((myrow)=>myrow.shopname==="one") ){ %>
       <tr class="<%=transaction.transactionType.substring(0,3)%>">
         <td>
           <%=moment(transaction.createdAt).add(19800,
@@ -120,8 +123,56 @@
         <td>
           <a href="/users/pop/<%=transaction.id%>">Delete</a>
         </td>
+        <!-- <td><%=transaction.shopname%></td> -->
       </tr>
       <%} %>
+
+    </table>
+    <h1 style="margin: auto"> SHOP 2 </h1>
+    <table style="margin: auto" class="meri-table" >
+      <tr style="background: blue; color: white">
+        <th>Time</th>
+        <th>Number</th>
+        <th>Net Price</th>
+        <!-- <th>Items</th> -->
+        <th>Transaction Type</th>
+        <th>CGST(2.5%)</th>
+        <th>SGST(2.5%)</th>
+        <th>CGST(6%)</th>
+        <th>SGST(6%)</th>
+        <th>Info</th>
+        <th>Delete</th>
+      </tr>
+      <% for(transaction of transactions.filter((myrow)=>myrow.shopname!="one") ){ %>
+      <tr class="<%=transaction.transactionType.substring(0,3)%>">
+        <td>
+          <%=moment(transaction.createdAt).add(19800,
+          'seconds').format('DD-MM-YYYY')%>
+        </td>
+        <td><%=transaction.transactionNumber%></td>
+        <td><%=transaction.netPrice%></td>
+        <!-- <td>
+          <% for(purc of transaction.purchases) {%>
+          <li>
+            <%=purc.itemName%> <%=purc.itemQuantity%> <%=purc.itemTotalPrice%>
+          </li>
+          <%} %>
+        </td> -->
+        <td><%=transaction.transactionType%></td>
+
+        <td><%=((transaction.gstAsPerfive)/2).toFixed(2)%></td>
+        <td><%=((transaction.gstAsPerfive)/2).toFixed(2)%></td>
+        <td><%=((transaction.gstAsPertwel)/2).toFixed(2)%></td>
+        <td><%=((transaction.gstAsPertwel)/2).toFixed(2)%></td>
+
+        <td><%=transaction.remarks%></td>
+        <td>
+          <a href="/users/pop/<%=transaction.id%>">Delete</a>
+        </td>
+        <!-- <td><%=transaction.shopname%></td> -->
+      </tr>
+      <%} %>
+
     </table>
   </div>
 </body>

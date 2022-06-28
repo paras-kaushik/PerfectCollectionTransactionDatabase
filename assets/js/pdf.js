@@ -36,14 +36,53 @@ function resetMySale() {
   // document.getElementById("last-transaction").innerHTML =
   //   localStorage.getItem("ltrs");
 }
+var currentDiscountValue=10;
 window.onload = function () {
   $(function () {
+    completeTransactionJson["shopname"] = localStorage.getItem("shopname");
+    //window.localStorage.setItem('shopname','one')
+
+
+    var x=document.getElementById('bigDiscountCheckbox');
+    var bigDiscounttoggle = localStorage.getItem("bigDiscounttoggle");
+   if(bigDiscounttoggle==null) bigDiscounttoggle="unsetDiscount";
+
+   var meriDiscountValue=document.getElementById('meriDiscountValue');
+
+    if(bigDiscounttoggle==="setDiscount"){// for intial render
+      x.checked=bigDiscounttoggle;
+      meriDiscountValue.innerText='20% DISCOUNT';
+      currentDiscountValue=20;
+      document.body.style.background = "red";
+
+    }else{
+      document.body.style.background = "blue";
+      currentDiscountValue=10;
+    }
+
+    x.addEventListener('change',()=>{
+      if(x.checked){
+        localStorage.setItem("bigDiscounttoggle", "setDiscount");
+        meriDiscountValue.innerText='20% DISCOUNT';
+        document.body.style.background = "red";
+        currentDiscountValue=20;
+        window.location.reload();
+      }else{
+        localStorage.setItem("bigDiscounttoggle", "unsetDiscount");
+        meriDiscountValue.innerText='10% DISCOUNT';
+        document.body.style.background = "blue";
+        currentDiscountValue=10;
+        window.location.reload();
+      }
+    })
+
+
     document.getElementById("wild-input").style.background = "deeppink";
     document.getElementById("wild-input").style.color = "white";
 
     $("div.hindi").hide(); // hide it initially
     $(".rough").hide();
-    document.body.style.background = "blue";
+
     document.getElementsByClassName("actual")[0].style.background = "#d5cdff";
     document.getElementsByClassName("english")[0].style.background = "blue";
     document.getElementsByClassName("english")[0].style.color = "white";
@@ -54,7 +93,7 @@ window.onload = function () {
         document.getElementsByClassName("rough")[0].style.display === "none"
       ) {
         document.getElementsByClassName("rough")[0].style.display = "block";
-        document.body.style.background = "green";
+        //document.body.style.background = "green";
         document.getElementsByClassName("rough")[0].style.background =
           "#b2d1b2";
         document.getElementsByClassName("rough")[0].style.color = "black";
@@ -71,7 +110,7 @@ window.onload = function () {
         document.getElementsByClassName("actual")[0].style.color = "black";
         document.getElementsByClassName("english")[0].style.background = "blue";
         document.getElementsByClassName("english")[0].style.color = "white";
-        document.body.style.background = "blue";
+        //document.body.style.background = "blue";
       }
     });
   });
@@ -175,6 +214,7 @@ window.onload = function () {
     }
     completeTransactionJson["remarks"] =
       document.getElementById("wild-input").value;
+      completeTransactionJson["shopname"] = localStorage.getItem("shopname");
     completeTransactionJson["createdAt"] =
       document.getElementById("page-date").value;
 
@@ -309,6 +349,9 @@ function updatePageTotals() {
   if (tot >= 0) {
     document.getElementById("page-total-sum").innerText = tot;
     var discount = tot / 10;
+    if(currentDiscountValue===20){
+      discount*=2;
+    }
     document.getElementById("page-total-discountMinus").innerText =
       "-" + discount;
     tot = tot - discount;
@@ -320,6 +363,9 @@ function updatePageTotals() {
     var badagst = 0;
     if (totabovethousand > 0) {
       var discount_bada = totabovethousand / 10;
+      if(currentDiscountValue===20){
+        discount_bada*=2;
+      }
       totabovethousand -= discount_bada;
       // badagst = totabovethousand * (12 / 112);
       badagst = totabovethousand * (5 / 105);
@@ -344,6 +390,9 @@ function updatePageTotals() {
     var chotagst = 0;
     if (totbelowthousand > 0) {
       var discount_chota = totbelowthousand / 10;
+      if(currentDiscountValue===20){
+        discount_chota*=2;
+      }
       totbelowthousand -= discount_chota;
       chotagst = totbelowthousand * (5 / 105);
       // var eachchota = chotagst / 2;

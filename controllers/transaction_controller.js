@@ -22,6 +22,7 @@ module.exports.create = function (req, res) {
       transactionName: "TBD",
       transactionType: x.transactionType,
       remarks: x.remarks,
+      shopname:x.shopname,
       purchases: myPurchases,
       totalItems: parseInt(x.totalItems),
       totalPrice: parseInt(x.totalPrice),

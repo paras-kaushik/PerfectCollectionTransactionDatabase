@@ -17,6 +17,9 @@ const transactionSchema = new mongoose.Schema(
     remarks: {
       type: String,
     },
+    shopname:{
+      type:String,
+    },
     purchases: [
       {
         itemNumber: {
