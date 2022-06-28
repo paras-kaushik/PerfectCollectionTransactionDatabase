@@ -20,7 +20,3 @@ td {
   display: flex;
   flex-direction: column;
 }
-.meri-table{
-  margin: 3rem;
-  background-color: aqua;
-}
