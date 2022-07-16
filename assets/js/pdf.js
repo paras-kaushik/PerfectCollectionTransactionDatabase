@@ -51,8 +51,8 @@ window.onload = function () {
 
     if(bigDiscounttoggle==="setDiscount"){// for intial render
       x.checked=bigDiscounttoggle;
-      meriDiscountValue.innerText='20% DISCOUNT';
-      currentDiscountValue=20;
+      meriDiscountValue.innerText='15% DISCOUNT';
+      currentDiscountValue=15;
       document.body.style.background = "red";
 
     }else{
@@ -63,9 +63,9 @@ window.onload = function () {
     x.addEventListener('change',()=>{
       if(x.checked){
         localStorage.setItem("bigDiscounttoggle", "setDiscount");
-        meriDiscountValue.innerText='20% DISCOUNT';
+        meriDiscountValue.innerText='15% DISCOUNT';
         document.body.style.background = "red";
-        currentDiscountValue=20;
+        currentDiscountValue=15;
         window.location.reload();
       }else{
         localStorage.setItem("bigDiscounttoggle", "unsetDiscount");
@@ -161,7 +161,7 @@ window.onload = function () {
 
   document.getElementById("page-date").value = today
     .toISOString()
-    .substr(0, 10);
+    .substring(0, 10);
   var inputPair = document.querySelectorAll(".input-pair");
   inputPair[0].addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
@@ -351,8 +351,8 @@ function updatePageTotals() {
   if (tot >= 0) {
     document.getElementById("page-total-sum").innerText = tot;
     var discount = tot / 10;
-    if(currentDiscountValue===20){
-      discount*=2;
+    if(currentDiscountValue===15){
+      discount=((tot*15)/100);
     }
     document.getElementById("page-total-discountMinus").innerText =
       "-" + discount;
@@ -365,8 +365,8 @@ function updatePageTotals() {
     var badagst = 0;
     if (totabovethousand > 0) {
       var discount_bada = totabovethousand / 10;
-      if(currentDiscountValue===20){
-        discount_bada*=2;
+      if(currentDiscountValue===15){
+        discount_bada=((totabovethousand*15)/100);
       }
       totabovethousand -= discount_bada;
       // badagst = totabovethousand * (12 / 112);
@@ -392,8 +392,8 @@ function updatePageTotals() {
     var chotagst = 0;
     if (totbelowthousand > 0) {
       var discount_chota = totbelowthousand / 10;
-      if(currentDiscountValue===20){
-        discount_chota*=2;
+      if(currentDiscountValue===15){
+        discount_chota=((totbelowthousand*15)/100);
       }
       totbelowthousand -= discount_chota;
       chotagst = totbelowthousand * (5 / 105);
