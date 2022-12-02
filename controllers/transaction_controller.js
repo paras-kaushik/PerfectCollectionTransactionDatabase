@@ -13,7 +13,7 @@ module.exports.create = function (req, res) {
     ob["itemTotalPrice"] = x.purchases[i].itemTotalPrice;
     myPurchases.push(ob);
   }
-  console.log("papa");
+  console.log("this is me");
   console.log(x);
 
   Transaction.create(
