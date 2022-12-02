@@ -88,8 +88,6 @@ module.exports.profile = async function (req, res) {
       },
     ],
     function (err, obj) {
-      // console.log("hereis", obj);
-
       if (obj && obj[0]) {
         todaysSale = obj[0].total;
         todayschotagst = obj[0].totalchotagst;
