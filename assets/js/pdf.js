@@ -195,9 +195,9 @@ window.onload = function () {
     ).innerText;
     transactionSum = parseInt(transactionSum);
 
-    var msg = new SpeechSynthesisUtterance();
-    msg.text = "TOTAL BILL AMOUNT " + " " + transactionSum;
-    window.speechSynthesis.speak(msg);
+    // var msg = new SpeechSynthesisUtterance();
+    // msg.text = "TOTAL BILL AMOUNT " + " " + transactionSum;
+    // window.speechSynthesis.speak(msg);
 
     var deleteButtons = document.getElementsByClassName("item-delete");
     for (var i = 0; i < deleteButtons.length; i++) {
@@ -205,7 +205,6 @@ window.onload = function () {
     }
 
     const invoice = this.document.getElementById("invoice");
-    console.log("------->>> ", invoice);
     var keypads = document.getElementById("input-and-mapping-containing-div");
 
     // completeTransactionJson["transactionType"]
@@ -221,6 +220,9 @@ window.onload = function () {
       document.getElementById("page-date").value;
 
     keypads.remove();
+    const listContainer = document.querySelector('.item-table');
+    listContainer.style.maxHeight = 'unset'
+
     window.print();
     window.location.reload();
     msg.text = "LAST BILLED AMOUNT " + " " + transactionSum;
@@ -480,6 +482,11 @@ function additemNumberToList() {
   // increase total items count
   increaseTotalItemsCount();
   updatePageTotals();
+
+   const listContainer = document.querySelector('.item-table');
+   const listItemToScroll = document.getElementById(unqiueId);
+   const scrollPosition = listItemToScroll.offsetTop - listContainer.offsetTop;
+   listContainer.scrollTop = scrollPosition;
 }
 function removeNode(id) {
   return completeTransactionJson["purchases"].filter(function (emp) {
