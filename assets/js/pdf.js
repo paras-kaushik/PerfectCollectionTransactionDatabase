@@ -1,29 +1,31 @@
 var completeTransactionJson = {};
+
 const shopItems = {
   1: "Kurta",
   2: "Nighty",
   3: "N.Suit",
   4: "Lower",
-  5: "T. Shirt",
+  5: "Capri",
   6: "Shorts",
-  7:"B.",
-  8: "Panties",
-  9: "U.W",
-  10: "Vest",
-  11:"Slip",
-  12:"C.Shorts",
-  13: "Hankey",
-  14: "Socks",
-  15:"Pajama",
-  16:"Supporter",
-  17: "Track Suit",
-  18: "Towel",
-  19: "Dhoti",
-  20:"Patka",
-  21: "Capri",
+  7: "Shirt",
+  8: "T-shirt",
+  9: "Trouser",
+  10:"B.",
+  11: "Panties",
+  12: "U.W",
+  13: "Vest",
+  14:"Slip",
+  15: "Hankey",
+  16: "Socks",
+  17:"Supporter",
+  18: "Track Suit",
+  19: "Towel",
+  20: "Dhoti",
+  21:"Patka",
   22: "Jacket",
   23: "Thermal",
 };
+
 function resetMySale() {
   //alert("YES");
   // n = 1;
@@ -472,7 +474,7 @@ function additemNumberToList() {
   completeTransactionJson["purchases"].push(newPurchase);
   var msg = new SpeechSynthesisUtterance();
   msg.text = itemName + " " + newRowTotal;
-  window.speechSynthesis.speak(msg);
+  //window.speechSynthesis.speak(msg);
 
   document.getElementById("table-body").innerHTML += listItem;
   // increase total items count
