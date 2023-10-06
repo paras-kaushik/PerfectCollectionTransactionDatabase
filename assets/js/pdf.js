@@ -475,7 +475,7 @@ function additemNumberToList() {
 
    const listContainer = document.querySelector('.item-table');
    const listItemToScroll = document.getElementById(unqiueId);
-   const scrollPosition = listItemToScroll.offsetTop - listContainer.offsetTop;
+  const scrollPosition = listItemToScroll.offsetTop;
    listContainer.scrollTop = scrollPosition;
 }
 function removeNode(id) {
