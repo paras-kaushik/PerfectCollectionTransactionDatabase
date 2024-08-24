@@ -3,66 +3,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Document</title>
-  <link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    crossorigin="anonymous"
-  />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    crossorigin="anonymous" />
   <link rel="stylesheet" href="/css/pdf.css" />
   <script src="/js/pdf.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <link
-  rel="stylesheet"
-  href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"
-/>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css" />
 
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>jQuery UI Datepicker - Default functionality</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-<script>
-  $( function() {
-    $( "#page-date" ).datepicker();
-  } );
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  <script>
+    $(function () {
+      $("#page-date").datepicker();
+    });
   </script>
 </head>
 
 <body>
 
-    <form action="/transaction/create" id="new-transaction-form" method="POST">
-      <input
-        type="hidden"
-        name="completeTransactionJson"
-      ></input>
-    </form>
-    <button id ="tbtn" type="button" class="btn btn-danger"></button>
-    <!-- <p style="color: white;">Date: <input type="text" id="datepicker" /></p> -->
-    <script type="text/javascript">
-      document.getElementById("tbtn").onclick = function () {
+  <form action="/transaction/create" id="new-transaction-form" method="POST">
+    <input type="hidden" name="completeTransactionJson"></input>
+  </form>
+  <button id="tbtn" type="button" class="btn btn-danger"></button>
+  <!-- <p style="color: white;">Date: <input type="text" id="datepicker" /></p> -->
+  <script type="text/javascript">
+    document.getElementById("tbtn").onclick = function () {
 
-        var c=$("#datepicker").datepicker('getDate');
+      var c = $("#datepicker").datepicker('getDate');
 
-          location.href = "/users/profile";
-      };
+      location.href = "/users/profile";
+    };
   </script>
 
 
 
 
   <div style="display: flex; flex-direction: row; ">
-    <div id="input-and-mapping-containing-div"
-      class="container list-control-container split left"
-    >
-    <!-- <h1>Press Z to see all transactions</h1> -->
+    <div id="input-and-mapping-containing-div" class="container list-control-container split left">
+      <!-- <h1>Press Z to see all transactions</h1> -->
       <h1 style="display: none;">
         Total Sale Today: ₹
-        <span  style="display: inline-block" id="nichod">0</span>
+        <span style="display: inline-block" id="nichod">0</span>
       </h1>
 
       <button id="ttb" style="display: none;">Change</button>
@@ -79,50 +68,20 @@
 
 
 
-      <h1 style="display: none;" >
+      <h1 style="display: none;">
         Last Transaction : ₹
         <span style="display: inline-block" id="last-transaction">0</span>
       </h1>
-      <input
-        type="number"
-        id="new-item-number"
-        class="input-pair"
-        name="itemNumber"
-        placeholder="Enter Item Number"
-        autofocus
-        required
-        style="height: 5 rem; margin: 1rem"
-        onkeyup="additemNumberToListOnEnter(event)"
-      />
-      <input
-        type="number"
-        id="new-item-price-input"
-        class="input-pair"
-        name="new-item-price-input"
-        placeholder="Enter Item Price"
-        required
-        style="height: 5 rem; margin: 1rem"
-        onkeyup="additemNumberToListOnEnter(event)"
-      />
-      <input
-        type="number"
-        id="new-item-quantity-input"
-        class="input-pair"
-        name="new-item-quantity-input"
-        placeholder="Enter Item Quantity"
-        required
-        style="height: 5 rem; margin: 1rem"
-        onkeyup="additemNumberToListOnEnter(event)"
-      />
-      <input
-        type="string"
-        id="wild-input"
-        class="wild"
-        name="wild-input"
-        style="height: 5 rem; margin: 1rem; color: white;"
-
-        placeholder="Fill Phone Number /remark"
-      />
+      <input type="number" id="new-item-number" class="input-pair" name="itemNumber" placeholder="Enter Item Number"
+        autofocus required style="height: 5 rem; margin: 1rem" onkeyup="additemNumberToListOnEnter(event)" />
+      <input type="number" id="new-item-price-input" class="input-pair" name="new-item-price-input"
+        placeholder="Enter Item Price" required style="height: 5 rem; margin: 1rem"
+        onkeyup="additemNumberToListOnEnter(event)" />
+      <input type="number" id="new-item-quantity-input" class="input-pair" name="new-item-quantity-input"
+        placeholder="Enter Item Quantity" required style="height: 5 rem; margin: 1rem"
+        onkeyup="additemNumberToListOnEnter(event)" />
+      <input type="string" id="wild-input" class="wild" name="wild-input"
+        style="height: 5 rem; margin: 1rem; color: white;" placeholder="Fill Phone Number /remark" />
       <!-- <button
           type="submit"
           class="btn btn-primary btn-lg"
@@ -131,37 +90,30 @@
           ADD TO LIST
         </button> -->
       <div>
-        <div><h6>Item Number Meaning</h6></div>
+        <div>
+          <h6>Item Number Meaning</h6>
+        </div>
         <div id="map-list" class="wrapper"></div>
       </div>
 
-      <div
-        style="
+      <div style="
           display: flex;
           justify-content: center;
           align-items: center;
           height: 50px;
           margin: 5rem;
-        "
-      >
+        ">
         <!-- <button id="reset" class="btn btn-info btn-xl" onclick="resetMySale()">
           RESET
         </button> -->
 
-        <button
-          class="btn btn-success btn-xl"
-          style="display: none"
-          id="download"
-        >
+        <button class="btn btn-success btn-xl" style="display: none" id="download">
           BILL
         </button>
       </div>
     </div>
 
-    <div
-      class="container d-flex justify-content-center mt-50 mb-50 split right"
-      style="padding: 2rem"
-    >
+    <div class="container d-flex justify-content-center mt-50 mb-50 split right" style="padding: 2rem">
       <div class="row">
         <div class="col-md-12">
           <div class="card" id="invoice">
@@ -174,14 +126,12 @@
               </div> -->
             <div class="card-body">
               <ul class="list list-unstyled mb-0 text-left">
-                <li
-                  style="
+                <li style="
                     font-size: 2.7rem;
                     word-wrap: break-word;
                     font-weight: bolder;
                     text-decoration: underline;
-                  "
-                >
+                  ">
                   Perfect Collection (9899258797)
                 </li>
                 <!-- <li style="font-size: x-large">9899358797</li> -->
@@ -206,11 +156,11 @@
                         </li> -->
               </ul>
               <div class="list list-unstyled mb-0 text-left">
-                <h4 style="font-size: 1.5rem; font-weight: bold"  class="rough">
+                <h4 style="font-size: 1.5rem; font-weight: bold" class="rough">
                   Rough Estimate No.
                   <span class="lucky-draw-number">the lucky number here</span>
                 </h4>
-                <h4 style="font-size: 1.5rem; font-weight: bold"  class="actual">
+                <h4 style="font-size: 1.5rem; font-weight: bold" class="actual">
                   Rough Estimate No
                   <span class="lucky-draw-number">the lucky number here</span>
                 </h4>
@@ -269,14 +219,11 @@
                       <tbody>
                         <tr>
                           <th class="text-left">Total Items:</th>
-                          <td
-                            id="page-total-items"
-                            style="
+                          <td id="page-total-items" style="
                               margin-top: 0.2rem;
                               margin-left: -5rem;
                               position: absolute;
-                            "
-                          >
+                            ">
                             0
                           </td>
                         </tr>
@@ -319,22 +266,19 @@
                         <tr>
                           <th class="text-left">Net Total:</th>
                           <td class="text-right text-primary">
-                            <h5
-                              id="paget-total-netTotal"
-                              style="
+                            <h5 id="paget-total-netTotal" style="
                                 font-size: xxx-large;
                                 font-weight: 900 !important;
 
                                 color: black;
-                              "
-                            >
+                              ">
                               0
                             </h5>
                           </td>
                         </tr>
 
 
-                          <!-- <tr style="width: 100%;">
+                        <!-- <tr style="width: 100%;">
 
                             <td>
                               <div class="gstbox">
@@ -381,46 +325,38 @@
                 </div>
               </div>
             </div>
-            <div
-              class="list list-unstyled mb-0 text-left"
-              style="margin-left: 1rem; margin-top: -6rem"
-            >
-               <!-- <span>धन्यवाद ! आपका दिन मंगलमय हो ! शुभ दीपावली!</span>
+            <div class="list list-unstyled mb-0 text-left" style="margin-left: 1rem; margin-top: -6rem">
+              <!-- <span>धन्यवाद ! आपका दिन मंगलमय हो ! शुभ दीपावली!</span>
                <span style="font-weight: 700; letter-spacing: 2px">
                   आपका दिन मंगलमय हो ! शुभ दीपावली!</span
                 >  -->
-                <div
-                style="
+              <div style="
                   display: flex;
                   flex-direction: column;
                   align-items: center;
-                "
-              >
-                 <div style="display: flex; flex-direction: row; margin-top: 2rem;">
+                ">
+                <div style="display: flex; flex-direction: row; margin-top: 2rem;">
 
-                  <div style="padding: 1rem; border: double">KURTA PAJAMA</div>
-                  <div style="padding: 1rem; border: double">NIGHT WEARS</div>
-                  <div style="padding: 1rem; border: double">SPORTS WEARS</div>
 
-                 </div>
+                </div>
               </div>
               <div style="display: flex;justify-content: center;">
-                <div style="border: solid;padding: 10px;">FIXED PRICE SHOP</div>
+                <div style="padding: 10px;"></div>
               </div>
 
 
 
 
 
+            </div>
           </div>
-        </div>
-        <!-- <div class="col-md-12 text-right mb-3"> -->
+          <!-- <div class="col-md-12 text-right mb-3"> -->
 
-        <!-- <div>
+          <!-- <div>
           <div><h6>Item Number Meaning</h6></div>
           <div id="map-list" class="wrapper"></div>
         </div> -->
+        </div>
       </div>
     </div>
-  </div>
 </body>
