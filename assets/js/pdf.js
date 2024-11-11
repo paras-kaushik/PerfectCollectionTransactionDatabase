@@ -10,18 +10,18 @@ const shopItems = {
   7: "Shirt",
   8: "T-shirt",
   9: "Trouser",
-  10:"B.",
+  10: "B.",
   11: "Panties",
   12: "U.W",
   13: "Vest",
-  14:"Slip",
+  14: "Slip",
   15: "Hankey",
   16: "Socks",
-  17:"Supporter",
+  17: "Supporter",
   18: "Track Suit",
   19: "Towel",
   20: "Dhoti",
-  21:"Patka",
+  21: "Patka",
   22: "Jacket",
   23: "Thermal",
 };
@@ -38,46 +38,44 @@ function resetMySale() {
   // document.getElementById("last-transaction").innerHTML =
   //   localStorage.getItem("ltrs");
 }
-var currentDiscountValue=10;
+var currentDiscountValue = 10;
 window.onload = function () {
   $(function () {
     completeTransactionJson["shopname"] = localStorage.getItem("shopname");
     //window.localStorage.setItem('shopname','one')
 
-
-    var x=document.getElementById('bigDiscountCheckbox');
+    var x = document.getElementById("bigDiscountCheckbox");
     var bigDiscounttoggle = localStorage.getItem("bigDiscounttoggle");
-   if(bigDiscounttoggle==null) bigDiscounttoggle="unsetDiscount";
+    if (bigDiscounttoggle == null) bigDiscounttoggle = "unsetDiscount";
 
-   var meriDiscountValue=document.getElementById('meriDiscountValue');
+    var meriDiscountValue = document.getElementById("meriDiscountValue");
 
-    if(bigDiscounttoggle==="setDiscount"){// for intial render
-      x.checked=bigDiscounttoggle;
-      meriDiscountValue.innerText='15% DISCOUNT';
-      currentDiscountValue=15;
+    if (bigDiscounttoggle === "setDiscount") {
+      // for intial render
+      x.checked = bigDiscounttoggle;
+      meriDiscountValue.innerText = "15% DISCOUNT";
+      currentDiscountValue = 15;
       document.body.style.background = "red";
-
-    }else{
+    } else {
       document.body.style.background = "blue";
-      currentDiscountValue=10;
+      currentDiscountValue = 10;
     }
 
-    x.addEventListener('change',()=>{
-      if(x.checked){
+    x.addEventListener("change", () => {
+      if (x.checked) {
         localStorage.setItem("bigDiscounttoggle", "setDiscount");
-        meriDiscountValue.innerText='15% DISCOUNT';
+        meriDiscountValue.innerText = "15% DISCOUNT";
         document.body.style.background = "red";
-        currentDiscountValue=15;
+        currentDiscountValue = 15;
         window.location.reload();
-      }else{
+      } else {
         localStorage.setItem("bigDiscounttoggle", "unsetDiscount");
-        meriDiscountValue.innerText='10% DISCOUNT';
+        meriDiscountValue.innerText = "10% DISCOUNT";
         document.body.style.background = "blue";
-        currentDiscountValue=10;
+        currentDiscountValue = 10;
         window.location.reload();
       }
-    })
-
+    });
 
     document.getElementById("wild-input").style.background = "deeppink";
     document.getElementById("wild-input").style.color = "white";
@@ -211,22 +209,42 @@ window.onload = function () {
     }
     completeTransactionJson["remarks"] =
       document.getElementById("wild-input").value;
-      completeTransactionJson["shopname"] = localStorage.getItem("shopname");
+    completeTransactionJson["shopname"] = localStorage.getItem("shopname");
     completeTransactionJson["createdAt"] =
       document.getElementById("page-date").value;
 
     keypads.remove();
-    const listContainer = document.querySelector('.item-table');
-    listContainer.style.maxHeight = 'unset'
+    const listContainer = document.querySelector(".item-table");
+    listContainer.style.maxHeight = "unset";
 
     window.print();
     window.location.reload();
 
-    var form = document.getElementById("new-transaction-form");
-    form.completeTransactionJson.value = JSON.stringify(
-      completeTransactionJson
-    );
-    form.submit();
+    // var form = document.getElementById("new-transaction-form");
+    // form.completeTransactionJson.value = JSON.stringify(
+    //   completeTransactionJson
+    // );
+    // form.submit();
+    fetch("/transaction/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(completeTransactionJson),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+       // window.location.reload(); // Reload the page on success
+      })
+      .catch((error) => {
+        // console.error("Error:", error);
+      });
 
     console.log(JSON.stringify(completeTransactionJson));
 
@@ -279,15 +297,15 @@ window.onload = function () {
         document.getElementById("download").click();
 
       if (name == "z" || name == "Z") {
-        if(localStorage.getItem("shopname")=="one")
-        document.getElementById("tbtn").click();
+        if (localStorage.getItem("shopname") == "one")
+          document.getElementById("tbtn").click();
       }
       if (name == "c" || name == "C") {
         document.getElementById("ttb").click();
       }
       if (name == "m" || name == "M") {
-        if(localStorage.getItem("shopname")=="one")
-        location.href = "/users/month";
+        if (localStorage.getItem("shopname") == "one")
+          location.href = "/users/month";
       }
     },
     false
@@ -348,8 +366,8 @@ function updatePageTotals() {
   if (tot >= 0) {
     document.getElementById("page-total-sum").innerText = tot;
     var discount = tot / 10;
-    if(currentDiscountValue===15){
-      discount=((tot*15)/100);
+    if (currentDiscountValue === 15) {
+      discount = (tot * 15) / 100;
     }
     document.getElementById("page-total-discountMinus").innerText =
       "-" + discount;
@@ -362,8 +380,8 @@ function updatePageTotals() {
     var badagst = 0;
     if (totabovethousand > 0) {
       var discount_bada = totabovethousand / 10;
-      if(currentDiscountValue===15){
-        discount_bada=((totabovethousand*15)/100);
+      if (currentDiscountValue === 15) {
+        discount_bada = (totabovethousand * 15) / 100;
       }
       totabovethousand -= discount_bada;
       // badagst = totabovethousand * (12 / 112);
@@ -389,8 +407,8 @@ function updatePageTotals() {
     var chotagst = 0;
     if (totbelowthousand > 0) {
       var discount_chota = totbelowthousand / 10;
-      if(currentDiscountValue===15){
-        discount_chota=((totbelowthousand*15)/100);
+      if (currentDiscountValue === 15) {
+        discount_chota = (totbelowthousand * 15) / 100;
       }
       totbelowthousand -= discount_chota;
       chotagst = totbelowthousand * (5 / 105);
@@ -473,10 +491,10 @@ function additemNumberToList() {
   increaseTotalItemsCount();
   updatePageTotals();
 
-   const listContainer = document.querySelector('.item-table');
-   const listItemToScroll = document.getElementById(unqiueId);
+  const listContainer = document.querySelector(".item-table");
+  const listItemToScroll = document.getElementById(unqiueId);
   const scrollPosition = listItemToScroll.offsetTop;
-   listContainer.scrollTop = scrollPosition;
+  listContainer.scrollTop = scrollPosition;
 }
 function removeNode(id) {
   return completeTransactionJson["purchases"].filter(function (emp) {
@@ -523,4 +541,20 @@ function movetoinputpairs(event) {
     console.log(pairs);
     //pairs[0].focus();
   }
+}
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("/service-worker.js").then(
+      function (registration) {
+        console.log(
+          "ServiceWorker registration successful with scope: ",
+          registration.scope
+        );
+      },
+      function (err) {
+        console.log("ServiceWorker registration failed: ", err);
+      }
+    );
+  });
 }
