@@ -26,20 +26,28 @@ const shopItems = {
   23: "Thermal",
 };
 
-function resetMySale() {
-  //alert("YES");
-  // n = 1;
-  // m = 0;
-  // localStorage.setItem("on_load_counter", n);
-  // localStorage.setItem("total_sale", m);
-  // localStorage.setItem("ltrs", "");
-  // document.getElementById("lucky-draw-number").innerHTML = n;
-  // document.getElementById("nichod").innerHTML = m;
-  // document.getElementById("last-transaction").innerHTML =
-  //   localStorage.getItem("ltrs");
-}
+const registerServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.getRegistration('/service-worker.js');
+      
+      if (registration) {
+        console.log('ServiceWorker already registered with scope:', registration.scope);
+      } else {
+        const newRegistration = await navigator.serviceWorker.register('/service-worker.js');
+        console.log('ServiceWorker registered with scope:', newRegistration.scope);
+      }
+    } catch (err) {
+      console.error('ServiceWorker registration failed:', err);
+    }
+  } else {
+    console.log('Service workers are not supported in this browser.');
+  }
+};
+
 var currentDiscountValue = 10;
 window.onload = function () {
+  registerServiceWorker();
   $(function () {
     completeTransactionJson["shopname"] = localStorage.getItem("shopname");
     //window.localStorage.setItem('shopname','one')
