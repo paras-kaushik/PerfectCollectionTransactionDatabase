@@ -2,28 +2,14 @@ var completeTransactionJson = {};
 
 const shopItems = {
   1: "Kurta",
-  2: "Nighty",
-  3: "N.Suit",
-  4: "Lower",
-  5: "Capri",
-  6: "Shorts",
-  7: "Shirt",
-  8: "T-shirt",
-  9: "Trouser",
-  10: "B.",
-  11: "Panties",
-  12: "U.W",
-  13: "Vest",
-  14: "Slip",
-  15: "Hankey",
-  16: "Socks",
-  17: "Supporter",
-  18: "Track Suit",
-  19: "Towel",
-  20: "Dhoti",
-  21: "Patka",
-  22: "Jacket",
-  23: "Thermal",
+  2: "Kurti",
+  3: "Nighty",
+  4: "Night Suit",
+  5: "Cord Set",
+  6: "Pant/Plazo",
+  7: "Suit",
+  8: "Slip",
+  9: "Misc"
 };
 
 const registerServiceWorker = async () => {

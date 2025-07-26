@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 mongoose.connect(
-  "mongodb+srv://paras:paras@cluster0.nqjsv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "mongodb+srv://paraskaushik12:vSMrmhNAdP1OIKxH@naveli.qfh4qyi.mongodb.net/naveli?retryWrites=true&w=majority&appName=naveli",
+  { useNewUrlParser: true, useUnifiedTopology: true }
 );
 //mongoose.connect("mongodb://localhost/perfectCollectionDb");
 const db = mongoose.connection;
