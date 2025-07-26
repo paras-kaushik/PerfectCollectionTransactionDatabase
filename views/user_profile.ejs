@@ -27,9 +27,6 @@
       const { protocol, host, pathname } = window.location;
       console.log(pathname);
       //alert(pathname.substr(15));
-      if(localStorage.getItem("shopname")!="one"){
-        window.location.href="/";
-      }
 
       if (pathname.substr(15) === "") {
         document.getElementById("table-date").value = new Date()

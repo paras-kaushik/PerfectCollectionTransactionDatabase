@@ -35,7 +35,7 @@ var currentDiscountValue = 10;
 window.onload = function () {
   registerServiceWorker();
   $(function () {
-    completeTransactionJson["shopname"] = localStorage.getItem("shopname");
+    completeTransactionJson["shopname"] = "Naveli";
     //window.localStorage.setItem('shopname','one')
 
     var x = document.getElementById("bigDiscountCheckbox");
@@ -203,7 +203,7 @@ window.onload = function () {
     }
     completeTransactionJson["remarks"] =
       document.getElementById("wild-input").value;
-    completeTransactionJson["shopname"] = localStorage.getItem("shopname");
+    completeTransactionJson["shopname"] = "Naveli";
     completeTransactionJson["createdAt"] =
       document.getElementById("page-date").value;
 
@@ -291,15 +291,13 @@ window.onload = function () {
         document.getElementById("download").click();
 
       if (name == "z" || name == "Z") {
-        if (localStorage.getItem("shopname") == "one")
-          document.getElementById("tbtn").click();
+        document.getElementById("tbtn").click();
       }
       if (name == "c" || name == "C") {
         document.getElementById("ttb").click();
       }
       if (name == "m" || name == "M") {
-        if (localStorage.getItem("shopname") == "one")
-          location.href = "/users/month";
+        location.href = "/users/month";
       }
     },
     false
