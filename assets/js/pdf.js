@@ -15,28 +15,9 @@ const shopItems = {
   12: "Jooti",
 };
 
-const registerServiceWorker = async () => {
-  if ('serviceWorker' in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.getRegistration('/service-worker.js');
-      
-      if (registration) {
-        console.log('ServiceWorker already registered with scope:', registration.scope);
-      } else {
-        const newRegistration = await navigator.serviceWorker.register('/service-worker.js');
-        console.log('ServiceWorker registered with scope:', newRegistration.scope);
-      }
-    } catch (err) {
-      console.error('ServiceWorker registration failed:', err);
-    }
-  } else {
-    console.log('Service workers are not supported in this browser.');
-  }
-};
 
 var currentDiscountValue = 10;
 window.onload = function () {
-  registerServiceWorker();
   $(function () {
     completeTransactionJson["shopname"] = localStorage.getItem("shopname");
     //window.localStorage.setItem('shopname','one')
@@ -538,20 +519,4 @@ function movetoinputpairs(event) {
     console.log(pairs);
     //pairs[0].focus();
   }
-}
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("/service-worker.js").then(
-      function (registration) {
-        console.log(
-          "ServiceWorker registration successful with scope: ",
-          registration.scope
-        );
-      },
-      function (err) {
-        console.log("ServiceWorker registration failed: ", err);
-      }
-    );
-  });
 }
