@@ -81,7 +81,7 @@ a {
   background-color: #2196f3;
 }
 
-.btn-labeled > b {
+.btn-labeled>b {
   position: absolute;
   top: -1px;
   background-color: blue;
@@ -89,6 +89,7 @@ a {
   line-height: 1;
   padding: 0.62503rem;
 }
+
 .list-control-container {
   display: flex;
   flex-direction: column;
@@ -99,24 +100,30 @@ a {
   /* justify-content: space-evenly; */
   /* align-items: baseline; */
 }
+
 #my-employer-image {
   width: 15%;
   height: 15%;
-  margin: auto; /* BRINGS THIS IMAGE TO CENTER ! */
+  margin: auto;
+  /* BRINGS THIS IMAGE TO CENTER ! */
 }
+
 /*above we set the div dimesnsinons -now we will make the image agree to it  otherwise image will just overflow*/
 #my-employer-image img {
   height: 100%;
-  width: 100%; /*means 100 % of immidiate div*/
+  width: 100%;
+  /*means 100 % of immidiate div*/
   border-radius: 90%;
   margin-bottom: -3rem;
 }
+
 .wrapper {
   display: grid;
   grid-template-columns: repeat(3, 9fr);
   font-size: 2rem;
   font-weight: 800;
 }
+
 body {
   margin: 0;
   font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -131,12 +138,14 @@ body {
   background-color: rebeccapurple;
   height: min-content;
 }
+
 .btn-xl {
   padding: 1rem;
   font-size: 20px;
   border-radius: 10px;
   width: 120%;
 }
+
 .table td,
 .table th {
   vertical-align: top;
@@ -144,6 +153,7 @@ body {
   font-size: 2rem;
   font-weight: 700;
 }
+
 .split {
   height: 100%;
   width: 50%;
@@ -161,10 +171,12 @@ body {
 .right {
   right: 0;
 }
+
 ::placeholder {
   /* Most modern browsers support this now. */
   color: black;
 }
+
 .gstbox {
   display: flex;
   justify-content: space-between;
@@ -172,16 +184,20 @@ body {
   border: solid;
   z-index: 1;
 }
+
 .gstbox div {
   margin: 0 10px;
 }
+
 .abc {
   display: flex;
 }
+
 .abc h5 {
   margin-right: 10px;
   font-size: 1.5rem;
 }
+
 .switch {
   position: relative;
   display: inline-block;
@@ -219,16 +235,107 @@ body {
   transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: red;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px red;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+#tbtn {
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
+  z-index: 10000;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  background-color: #6366f1;
+  /* Indigo color */
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+#tbtn:hover {
+  background-color: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+#tbtn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+#mbtn {
+  position: fixed;
+  bottom: 25px;
+  left: 200px;
+  z-index: 10000;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  background-color: #10b981;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+#mbtn:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+#mbtn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+#ttb {
+  position: fixed;
+  bottom: 25px;
+  left: 425px;
+  z-index: 10000;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  background-color: #8b5cf6;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+#ttb:hover {
+  background-color: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+#ttb:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }

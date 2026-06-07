@@ -26,12 +26,17 @@
     });
   </script>
 </head>
+
 <body>
-  <button id="tbtn" type="button" class="btn btn-danger"></button>
+  <button id="tbtn" type="button" class="btn btn-primary">Daily Sales</button>
+  <button id="mbtn" type="button" class="btn btn-secondary">Monthly Chart</button>
   <script type="text/javascript">
     document.getElementById("tbtn").onclick = function () {
       var c = $("#datepicker").datepicker('getDate');
       location.href = "/users/profile";
+    };
+    document.getElementById("mbtn").onclick = function () {
+      location.href = "/users/month";
     };
   </script>
 
@@ -41,7 +46,7 @@
         Total Sale Today: ₹
         <span style="display: inline-block" id="nichod">0</span>
       </h1>
-      <button id="ttb" style="display: none;">Change</button>
+      <button id="ttb" type="button" class="btn btn-info">Cash/Card</button>
       <div class="english">
         <h1>CARD/ DIGITAL</h1>
       </div>
@@ -52,16 +57,21 @@
         Last Transaction : ₹
         <span style="display: inline-block" id="last-transaction">0</span>
       </h1>
+      <input type="tel" id="phone-input" class="phone-field" name="phone-input"
+        placeholder="Customer Phone" autofocus required maxlength="10"
+        style="height: 5rem; margin: 1rem; font-size: 1.5rem; border: 3px solid green; background: #e8f5e9;"
+        onkeyup="phoneFieldEnter(event)" />
+      <input type="text" id="wild-input" class="wild" name="wild-input"
+        style="height: 5rem; margin: 1rem; font-size: 1.3rem; border: 2px solid purple; background: #f3e5f5; color: black;"
+        placeholder="Customer Name" required />
       <input type="number" id="new-item-number" class="input-pair" name="itemNumber" placeholder="Enter Item Number"
-        autofocus required style="height: 5 rem; margin: 1rem" onkeyup="additemNumberToListOnEnter(event)" />
+        required style="height: 5 rem; margin: 1rem" onkeyup="additemNumberToListOnEnter(event)" />
       <input type="number" id="new-item-price-input" class="input-pair" name="new-item-price-input"
         placeholder="Enter Item Price" required style="height: 5 rem; margin: 1rem"
         onkeyup="additemNumberToListOnEnter(event)" />
       <input type="number" id="new-item-quantity-input" class="input-pair" name="new-item-quantity-input"
         placeholder="Enter Item Quantity" required style="height: 5 rem; margin: 1rem"
         onkeyup="additemNumberToListOnEnter(event)" />
-      <input type="string" id="wild-input" class="wild" name="wild-input"
-        style="height: 5 rem; margin: 1rem; color: white;" placeholder="Fill Phone Number /remark" />
       <div>
         <div>
           <h6>Item Number Meaning</h6>

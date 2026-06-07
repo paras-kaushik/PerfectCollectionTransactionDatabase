@@ -1,0 +1,3016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Cloud API Invoice Integration — Developer Guide</title>
+  <meta name="description" content="Complete developer guide for integrating WhatsApp Cloud API with PerfectCollection billing application, detailing server-side PDF generation, Meta dashboard setups, and step-by-step file modifications.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Highlight.js for Code Highlighting (Github Light Theme) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/diff.min.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      /* Light Theme Variables */
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-glow: rgba(99, 102, 241, 0.08);
+      
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      
+      --accent-indigo: #4f46e5;
+      --accent-indigo-hover: #3730a3;
+      --accent-indigo-glow: rgba(79, 70, 229, 0.08);
+      --accent-cyan: #0891b2;
+      --accent-emerald: #059669;
+      --accent-rose: #dc2626;
+      --accent-purple: #7c3aed;
+      
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      
+      --shadow-premium: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 8px -1px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 12px 24px -4px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+      --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--text-primary);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    a {
+      color: var(--accent-indigo);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    a:hover {
+      color: var(--accent-cyan);
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.5);
+    }
+
+    /* Layout */
+    .app-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 10;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.01);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .logo-icon {
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px var(--accent-indigo-glow);
+    }
+
+    .logo-text h2 {
+      font-size: 1.15rem;
+      line-height: 1.1;
+    }
+
+    .logo-text span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      padding: 0.6rem 1rem 0.6rem 2.2rem;
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+
+    .search-box input:focus {
+      background: #ffffff;
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 2px var(--accent-indigo-glow);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 14px;
+      height: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      overflow-y: auto;
+      flex-grow: 1;
+      padding-right: 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      background: #f8fafc;
+      color: var(--text-primary);
+    }
+
+    .nav-link.active {
+      background: var(--accent-indigo-glow);
+      color: var(--accent-indigo);
+      font-weight: 600;
+      border-left: 3px solid var(--accent-indigo);
+      padding-left: calc(0.85rem - 3px);
+    }
+
+    .nav-link i {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .doc-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Content Area */
+    .content {
+      padding: 3rem 4rem;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    section {
+      padding-top: 4rem;
+      margin-top: -2rem; /* anchor offsets */
+      margin-bottom: 5rem;
+      scroll-margin-top: 4rem;
+    }
+
+    section:first-of-type {
+      padding-top: 1rem;
+      margin-top: 0;
+    }
+
+    /* Hero / Header Card */
+    .hero-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 3rem;
+      margin-bottom: 4rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-premium);
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-card h1 {
+      font-size: 2.25rem;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--accent-indigo);
+      padding: 0.35rem 0.75rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-meta-item i {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-indigo);
+    }
+
+    /* Quick Dashboard Stats */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .dash-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition-normal);
+    }
+
+    .dash-card-icon {
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--accent-indigo);
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dash-card-icon.cyan { background: rgba(6, 182, 212, 0.08); color: var(--accent-cyan); }
+    .dash-card-icon.emerald { background: rgba(16, 185, 129, 0.08); color: var(--accent-emerald); }
+    .dash-card-icon.purple { background: rgba(168, 85, 247, 0.08); color: var(--accent-purple); }
+
+    .dash-card-info h4 {
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+
+    .dash-card-info p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Content Styling Elements */
+    .section-title {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .section-title i {
+      color: var(--accent-indigo);
+      width: 28px;
+      height: 28px;
+    }
+
+    .lead-text {
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin-bottom: 2rem;
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Grid (Before / After) */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .comparison-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      box-shadow: var(--shadow-premium);
+      transition: transform var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    .comparison-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .comparison-card.before {
+      border-top: 4px solid var(--accent-rose);
+      background: #fdf2f2;
+    }
+
+    .comparison-card.after {
+      border-top: 4px solid var(--accent-emerald);
+      background: #f0fdf4;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .before .card-badge { background: rgba(220, 38, 38, 0.1); color: var(--accent-rose); }
+    .after .card-badge { background: rgba(5, 150, 105, 0.1); color: var(--accent-emerald); }
+
+    .comparison-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .comparison-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .comparison-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .comparison-list li i {
+      width: 18px;
+      height: 18px;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .text-rose { color: var(--accent-rose); }
+    .text-emerald { color: var(--accent-emerald); }
+    .text-cyan { color: var(--accent-cyan); }
+
+    /* Flow Diagrams */
+    .flow-diagram-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: var(--shadow-premium);
+    }
+
+    .flow-step {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      transition: var(--transition-normal);
+    }
+
+    .flow-step:hover {
+      border-color: var(--accent-indigo);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .flow-icon {
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--accent-indigo);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .flow-step.accent-cyan .flow-icon { background: rgba(6, 182, 212, 0.08); color: var(--accent-cyan); }
+    .flow-step.accent-purple .flow-icon { background: rgba(168, 85, 247, 0.08); color: var(--accent-purple); }
+    .flow-step.accent-emerald .flow-icon { background: rgba(16, 185, 129, 0.08); color: var(--accent-emerald); }
+
+    .flow-content h4 {
+      font-size: 1rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .flow-content p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .flow-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: 0.75rem;
+      gap: 0.25rem;
+    }
+
+    .flow-arrow i {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-indigo);
+      animation: pulse-down 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-down {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    /* Checklist Progress Card */
+    .checklist-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-premium);
+    }
+
+    .checklist-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-bar-outer {
+      width: 100%;
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(to right, var(--accent-indigo), var(--accent-cyan));
+      width: 0%;
+      border-radius: 99px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .checklist-title-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.5rem 0 1rem 0;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      background: #f8fafc;
+      border: 1px solid transparent;
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition-fast);
+    }
+
+    .checklist-item:hover {
+      background: #f1f5f9;
+      border-color: var(--border-color);
+    }
+
+    .checklist-item input[type="checkbox"] {
+      display: none;
+    }
+
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--text-muted);
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+      transition: var(--transition-fast);
+    }
+
+    .checklist-item input[type="checkbox"]:checked + .custom-checkbox {
+      background: var(--accent-emerald);
+      border-color: var(--accent-emerald);
+      color: white;
+    }
+
+    .custom-checkbox::after {
+      content: '✓';
+      font-family: sans-serif;
+      font-weight: bold;
+      font-size: 0.7rem;
+      display: none;
+    }
+
+    .checklist-item input[type="checkbox"]:checked + .custom-checkbox::after {
+      display: block;
+    }
+
+    .checklist-item.checked {
+      opacity: 0.75;
+      text-decoration: line-through;
+      text-decoration-color: var(--text-muted);
+      background: #f0fdf4;
+      border-color: rgba(16, 185, 129, 0.15);
+    }
+
+    .checkbox-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .checklist-item.checked .checkbox-label {
+      color: var(--text-muted);
+    }
+
+    /* Sub-list inside checklist items */
+    .checklist-details {
+      margin-left: 2rem;
+      margin-bottom: 1.5rem;
+      list-style-type: disc;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding-left: 0.5rem;
+    }
+
+    /* Tables */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin: 2rem 0;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: var(--shadow-premium);
+    }
+
+    .premium-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+      background: var(--bg-card);
+    }
+
+    .premium-table th {
+      background: #f8fafc;
+      color: var(--text-primary);
+      font-weight: 600;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .premium-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    .premium-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .premium-table tr:hover {
+      background: #f8fafc;
+    }
+
+    .version-badge {
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--accent-indigo);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+
+    /* File Changes Accordions */
+    .accordion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin: 2rem 0;
+    }
+
+    .accordion-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: var(--transition-normal);
+      box-shadow: var(--shadow-premium);
+    }
+
+    .accordion-item:hover {
+      border-color: var(--accent-indigo);
+    }
+
+    .accordion-header {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      background: #f8fafc;
+      transition: background var(--transition-fast);
+    }
+
+    .accordion-header:hover {
+      background: #f1f5f9;
+    }
+
+    .file-title-block {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .file-icon {
+      color: var(--text-muted);
+      width: 20px;
+      height: 20px;
+    }
+
+    .file-name {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .badge-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .file-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .file-badge.create { background: rgba(5, 150, 105, 0.1); color: var(--accent-emerald); }
+    .file-badge.modify { background: rgba(124, 58, 237, 0.1); color: var(--accent-purple); }
+
+    .chevron-icon {
+      color: var(--text-muted);
+      transition: transform var(--transition-normal);
+      width: 18px;
+      height: 18px;
+    }
+
+    .accordion-item.open .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .accordion-item.open .accordion-content {
+      max-height: 2500px; /* high limit to accommodate large files */
+    }
+
+    .accordion-inner {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      background: #fafafa;
+    }
+
+    .accordion-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      border-left: 3px solid var(--accent-indigo);
+      padding-left: 1rem;
+    }
+
+    .code-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1rem 0;
+      border: 1px solid var(--border-color);
+    }
+
+    .code-header-bar {
+      background: #f1f5f9;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .code-lang {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      transition: var(--transition-fast);
+    }
+
+    .copy-btn:hover {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-primary);
+    }
+
+    .copy-btn i {
+      width: 14px;
+      height: 14px;
+    }
+
+    pre {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      border-radius: 4px;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.875em;
+      background: #f1f5f9;
+      color: var(--text-primary);
+    }
+
+    pre code {
+      padding: 1.25rem;
+      display: block;
+      overflow-x: auto;
+      background: #f8fafc !important;
+    }
+
+    /* Sub-tabs for detailed explanations */
+    .tabs-container {
+      margin-top: 1.5rem;
+    }
+
+    .tabs-headers {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-header {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .tab-header:hover {
+      color: var(--text-primary);
+      background: #f1f5f9;
+    }
+
+    .tab-header.active {
+      color: var(--accent-indigo);
+      background: var(--accent-indigo-glow);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fade-in 0.25s ease-out;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Callouts / Warnings / Tips */
+    .callout {
+      border-left: 4px solid var(--accent-indigo);
+      background: rgba(99, 102, 241, 0.03);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1.5rem 0;
+      display: flex;
+      gap: 1rem;
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .callout i {
+      color: var(--accent-indigo);
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .callout-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .callout.warning {
+      border-left-color: var(--accent-rose);
+      background: rgba(220, 38, 38, 0.02);
+    }
+
+    .callout.warning i { color: var(--accent-rose); }
+
+    .callout.tip {
+      border-left-color: var(--accent-cyan);
+      background: rgba(8, 145, 178, 0.02);
+    }
+
+    .callout.tip i { color: var(--accent-cyan); }
+
+    /* Timeline Section */
+    .timeline {
+      position: relative;
+      margin: 2rem 0;
+      padding-left: 2.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7.5px;
+      top: 0.5rem;
+      bottom: 0.5rem;
+      width: 2px;
+      background: var(--border-color);
+    }
+
+    .timeline-node {
+      position: relative;
+      padding-bottom: 2.5rem;
+    }
+
+    .timeline-node:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-marker {
+      position: absolute;
+      left: -2.5rem;
+      top: 0.25rem;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      border: 3px solid var(--accent-indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-normal);
+      z-index: 2;
+    }
+
+    .timeline-node:hover .timeline-marker {
+      background: var(--accent-indigo);
+      box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+      transform: scale(1.1);
+    }
+
+    .timeline-node.server-flow .timeline-marker {
+      border-color: var(--accent-cyan);
+    }
+    .timeline-node.server-flow:hover .timeline-marker {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(8, 145, 178, 0.3);
+    }
+
+    .timeline-content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-premium);
+      transition: transform var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    .timeline-node:hover .timeline-content-card {
+      transform: translateX(4px);
+      border-color: var(--accent-indigo);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .timeline-node.server-flow:hover .timeline-content-card {
+      border-color: var(--accent-cyan);
+    }
+
+    .timeline-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .timeline-step-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-indigo);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .timeline-node.server-flow .timeline-step-num {
+      color: var(--accent-cyan);
+    }
+
+    .timeline-node h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-node p {
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    /* Nested timeline for server steps */
+    .server-flow-box {
+      border-left: 2px dashed rgba(8, 145, 178, 0.2);
+      margin-top: 1rem;
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .server-step {
+      position: relative;
+    }
+
+    .server-step::before {
+      content: '→';
+      position: absolute;
+      left: -1.25rem;
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+
+    /* Error Grid cards */
+    .error-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .error-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.75rem;
+      box-shadow: var(--shadow-premium);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: var(--transition-normal);
+    }
+
+    .error-card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--accent-rose);
+    }
+
+    .error-card h4 {
+      font-size: 1.05rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .error-card h4 i {
+      color: var(--accent-rose);
+      width: 18px;
+      height: 18px;
+    }
+
+    .error-details {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: #fdf2f2;
+      border: 1px solid rgba(220, 38, 38, 0.1);
+      padding: 0.75rem;
+      border-radius: 6px;
+      color: var(--accent-rose);
+      overflow-x: auto;
+    }
+
+    .cause-block, .fix-block {
+      font-size: 0.875rem;
+    }
+
+    .cause-block strong, .fix-block strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .fix-block {
+      border-left: 3px solid var(--accent-emerald);
+      padding-left: 0.75rem;
+      background: #f0fdf4;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+
+    /* Reference link cards */
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin: 2rem 0;
+    }
+
+    .ref-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-premium);
+      transition: transform var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    .ref-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-indigo);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .ref-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .ref-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .ref-url {
+      color: var(--accent-indigo);
+      font-family: var(--font-mono);
+    }
+
+    .ref-card:hover .ref-url {
+      color: var(--accent-cyan);
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+      .app-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.5rem;
+      }
+      .nav-links {
+        display: none;
+      }
+      .content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .content {
+        padding: 1.5rem 1rem;
+      }
+      .hero-card {
+        padding: 1.5rem;
+      }
+      .hero-meta {
+        gap: 1rem;
+      }
+      .flow-step {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div>
+        <div class="logo-container">
+          <div class="logo-icon">PC</div>
+          <div class="logo-text">
+            <h2>PerfectCollection</h2>
+            <span>WhatsApp Connect</span>
+          </div>
+        </div>
+
+        <div class="search-box">
+          <i data-lucide="search"></i>
+          <input type="text" id="sec-search" placeholder="Search guide..." onkeyup="searchGuide()">
+        </div>
+
+        <nav class="nav-links" id="sidebar-menu">
+          <a href="#what-we-built" class="nav-link active"><i data-lucide="sparkles"></i> What We Built</a>
+          <a href="#how-it-works" class="nav-link"><i data-lucide="workflow"></i> How Cloud API Works</a>
+          <a href="#prerequisites" class="nav-link"><i data-lucide="shield-check"></i> Meta Setup Console</a>
+          <a href="#npm-packages" class="nav-link"><i data-lucide="box"></i> NPM Packages</a>
+          <a href="#file-changes" class="nav-link"><i data-lucide="file-diff"></i> File changes & Code</a>
+          <a href="#complete-flow" class="nav-link"><i data-lucide="git-commit"></i> User Event Flow</a>
+          <a href="#errors-fixes" class="nav-link"><i data-lucide="bug"></i> Troubleshooting Bugs</a>
+          <a href="#next-steps" class="nav-link"><i data-lucide="rocket"></i> Production Release</a>
+          <a href="#reference-links" class="nav-link"><i data-lucide="external-link"></i> Web References</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="doc-meta">
+          <div>v1.0.0 Stable</div>
+          <div>Updated April 2026</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+
+      <!-- Hero Header Card -->
+      <header class="hero-card">
+        <div class="hero-badge"><i data-lucide="code-2"></i> WhatsApp Cloud API Integration</div>
+        <h1>WhatsApp Cloud API Invoice Integration — Complete Developer Guide</h1>
+        <p style="font-size: 1.05rem; margin-bottom: 2rem; max-width: 800px;">
+          This developer manual contains everything needed to understand, configure, run, debug, and scale the WhatsApp invoice module within the PerfectCollection POS/billing architecture.
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item"><i data-lucide="user"></i> <span>Authored by Antigravity Agent</span></div>
+          <div class="hero-meta-item"><i data-lucide="calendar"></i> <span>Release: 19 April 2026</span></div>
+          <div class="hero-meta-item"><i data-lucide="clock"></i> <span>Read Time: ~15 mins</span></div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dash-card">
+            <div class="dash-card-icon"><i data-lucide="file-code"></i></div>
+            <div class="dash-card-info">
+              <h4>11 Files</h4>
+              <p>Modified or Created</p>
+            </div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon cyan"><i data-lucide="package"></i></div>
+            <div class="dash-card-info">
+              <h4>4 Packages</h4>
+              <p>Dependencies added</p>
+            </div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon emerald"><i data-lucide="shield-check"></i></div>
+            <div class="dash-card-info">
+              <h4>2 API Calls</h4>
+              <p>Media upload & Template</p>
+            </div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon purple"><i data-lucide="activity"></i></div>
+            <div class="dash-card-info">
+              <h4>Best-Effort</h4>
+              <p>Async billing flow safe</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Section 1: What We Built -->
+      <section id="what-we-built">
+        <h2 class="section-title"><i data-lucide="sparkles"></i> 1. What We Built</h2>
+        <p class="lead-text">
+          Modernized the print-only checkout experience into a digital-first, paperless workflow.
+        </p>
+        
+        <div class="comparison-grid">
+          <div class="comparison-card before">
+            <div class="card-badge">Before</div>
+            <h3>Standard Print Billing</h3>
+            <ul class="comparison-list">
+              <li><i data-lucide="shopping-cart"></i> Shopkeeper enters item metrics.</li>
+              <li><i data-lucide="keyboard"></i> Presses the <code>SHIFT</code> key trigger.</li>
+              <li><i data-lucide="printer"></i> Standard browser window print dialog opens.</li>
+              <li><i data-lucide="database"></i> Transaction parameters saved into MongoDB.</li>
+              <li><i data-lucide="alert-circle" class="text-rose"></i> <strong>Zero digital invoice copy sent to the client.</strong></li>
+            </ul>
+          </div>
+          <div class="comparison-card after">
+            <div class="card-badge accent">After (WhatsApp Active)</div>
+            <h3>Modern Digital Checkout</h3>
+            <ul class="comparison-list">
+              <li><i data-lucide="user-plus" class="text-emerald"></i> Input <strong>phone number</strong> and <strong>customer name</strong> first.</li>
+              <li><i data-lucide="printer" class="text-emerald"></i> Pressing <code>SHIFT</code> prints receipt physical slip.</li>
+              <li><i data-lucide="database" class="text-emerald"></i> Transaction details saved securely in database.</li>
+              <li><i data-lucide="file-text" class="text-cyan"></i> Server auto-generates a formatted PDF invoice dynamically.</li>
+              <li><i data-lucide="message-square" class="text-cyan"></i> <strong>PDF uploaded & sent to the customer's WhatsApp instantly.</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <i data-lucide="info"></i>
+          <div class="callout-content">
+            <p><strong>NA Bypass:</strong> If the shopkeeper types "NA" or leaves the phone number blank, the WhatsApp pipeline is safely bypassed. The app functions in traditional print-only mode.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: How WhatsApp Cloud API Works -->
+      <section id="how-it-works">
+        <h2 class="section-title"><i data-lucide="workflow"></i> 2. How WhatsApp Cloud API Works (End-to-End)</h2>
+        <p>
+          Meta's Cloud API provides an official, scalable platform to send media and templates programmatically using secure HTTP/REST queries.
+        </p>
+
+        <h3>2.1 — The Big Picture</h3>
+        <div class="flow-diagram-container">
+          <div class="flow-step">
+            <div class="flow-icon"><i data-lucide="server"></i></div>
+            <div class="flow-content">
+              <h4>Your Node.js Server</h4>
+              <p>Calculates bill, saves data, generates PDF buffer</p>
+            </div>
+          </div>
+          <div class="flow-arrow">
+            <span>HTTPS Request (Axios)</span>
+            <i data-lucide="chevron-down"></i>
+          </div>
+          <div class="flow-step accent-cyan">
+            <div class="flow-icon"><i data-lucide="network"></i></div>
+            <div class="flow-content">
+              <h4>Meta Graph API</h4>
+              <p>https://graph.facebook.com/v25.0/...</p>
+            </div>
+          </div>
+          <div class="flow-arrow">
+            <span>Meta Secure Routing</span>
+            <i data-lucide="chevron-down"></i>
+          </div>
+          <div class="flow-step accent-purple">
+            <div class="flow-icon"><i data-lucide="message-square"></i></div>
+            <div class="flow-content">
+              <h4>WhatsApp Infrastructure</h4>
+              <p>Meta handles delivery status and protocol formatting</p>
+            </div>
+          </div>
+          <div class="flow-arrow">
+            <span>Mobile Handshake</span>
+            <i data-lucide="chevron-down"></i>
+          </div>
+          <div class="flow-step accent-emerald">
+            <div class="flow-icon"><i data-lucide="smartphone"></i></div>
+            <div class="flow-content">
+              <h4>Client Device</h4>
+              <p>Receives PDF message template instantly in application</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>2.2 — Authentication</h3>
+        <p>Every transaction query to Meta's servers requires authorization headers using a secure Bearer token:</p>
+        <div class="code-container">
+          <div class="code-header-bar">
+            <span class="code-lang">HTTP Header</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+          </div>
+          <pre><code>Authorization: Bearer EAATDQj22ZCs...</code></pre>
+        </div>
+        <p><strong>AccessToken Types:</strong></p>
+        <ul>
+          <li><strong>Temporary Token:</strong> Valid for 24 hours. Excellent for active localized testing.</li>
+          <li><strong>System User Token:</strong> Permanent credential generated via Business Manager. Mandatory for stable production environments.</li>
+        </ul>
+
+        <h3 style="margin-top: 1.5rem;">2.3 — Media Upload & Message Template Dispatch (Two-Step Process)</h3>
+        <p>To deliver a file attachment via WhatsApp Cloud API, you must complete two steps: first upload the binary file to Meta's endpoints, then reference the returned ID in the template message call.</p>
+
+        <div class="tabs-container">
+          <div class="tabs-headers">
+            <button class="tab-header active" onclick="switchTab(this, 'step1-upload')">Step 1: Upload Media</button>
+            <button class="tab-header" onclick="switchTab(this, 'step2-send')">Step 2: Dispatch Template</button>
+          </div>
+          
+          <div id="step1-upload" class="tab-content active">
+            <p>Upload the raw PDF buffer to Meta media repositories:</p>
+            <div class="code-container">
+              <div class="code-header-bar">
+                <span class="code-lang">POST Request</span>
+                <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+              </div>
+              <pre><code class="language-http">POST https://graph.facebook.com/v25.0/{PHONE_NUMBER_ID}/media
+Content-Type: multipart/form-data
+Authorization: Bearer YOUR_TOKEN
+
+Fields:
+ - messaging_product: "whatsapp"
+ - file: <Binary PDF Bytes>
+ - type: "application/pdf"
+
+Response: { "id": "1234567890" }  <-- media_id</code></pre>
+            </div>
+          </div>
+          
+          <div id="step2-send" class="tab-content">
+            <p>Dispatch the message referencing the newly created <code>media_id</code>:</p>
+            <div class="code-container">
+              <div class="code-header-bar">
+                <span class="code-lang">JSON Payload</span>
+                <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+              </div>
+              <pre><code class="language-json">POST https://graph.facebook.com/v25.0/{PHONE_NUMBER_ID}/messages
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN
+
+{
+  "messaging_product": "whatsapp",
+  "to": "919899258797",
+  "type": "template",
+  "template": {
+    "name": "perfectcollection_invoice",
+    "language": { "code": "en_US" },
+    "components": [
+      {
+        "type": "header",
+        "parameters": [
+          { "type": "document", "document": { "id": "1234567890", "filename": "Invoice.pdf" } }
+        ]
+      },
+      {
+        "type": "body",
+        "parameters": [
+          { "type": "text", "text": "John" },
+          { "type": "text", "text": "#42" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">2.4 — Understanding Templates</h3>
+        <p>
+          Meta mandates pre-approved templates for outgoing business messages to reduce spam. Our template <code>perfectcollection_invoice</code> uses the following schema:
+        </p>
+        <div class="callout tip">
+          <i data-lucide="check-square"></i>
+          <div class="callout-content">
+            <p><strong>Header:</strong> Document attachment (the dynamic PDF invoice).</p>
+            <p><strong>Body:</strong> <code>Hello {{1}}, Your invoice for order {{2}} is attached. Thank you for shopping with us!</code></p>
+            <p>Parameters map dynamically: <code>{{1}}</code> is Customer Name, and <code>{{2}}</code> is Invoice Number.</p>
+          </div>
+        </div>
+
+        <h3>2.5 — Phone Numbers Formats</h3>
+        <p>The API expects numbers in full international layout <strong>without the <code>+</code> prefix</strong> or empty spaces (e.g. <code>919899258797</code>). The application script detects 10-digit entries and automatically prefixes India's code <code>91</code>.</p>
+      </section>
+
+      <!-- Section 3: Prerequisites -->
+      <section id="prerequisites">
+        <h2 class="section-title"><i data-lucide="shield-check"></i> 3. Prerequisites — Meta Dashboard Setup</h2>
+        <p>
+          You must set up your Meta App and WhatsApp Business console credentials before deploying code. Track your setup progress with the checklist below:
+        </p>
+
+        <div class="checklist-card">
+          <div class="checklist-progress-header">
+            <h3>Meta Platform Tasks</h3>
+            <span id="setup-progress-text">0% Completed</span>
+          </div>
+          <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="setup-progress"></div>
+          </div>
+
+          <div class="checklist-title-bar"><i data-lucide="monitor"></i> 3.1 — Create a Meta Developer App</div>
+          
+          <label class="checklist-item" id="item-1">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Go to developers.facebook.com and register/log in.</span>
+          </label>
+          <label class="checklist-item" id="item-2">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Click on <strong>My Apps</strong> → <strong>Create App</strong>.</span>
+          </label>
+          <label class="checklist-item" id="item-3">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Select <strong>"Business"</strong> as the app type to unlock business APIs.</span>
+          </label>
+          <label class="checklist-item" id="item-4">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Provide an app name (e.g. "PerfectCollection").</span>
+          </label>
+          <label class="checklist-item" id="item-5">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Go to App Dashboard → Scroll to "WhatsApp" card → Click <strong>Set Up</strong>.</span>
+          </label>
+
+          <div class="checklist-title-bar"><i data-lucide="sliders"></i> 3.2 — WhatsApp API Configuration</div>
+          
+          <label class="checklist-item" id="item-6">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Navigate to the API Setup screen.</span>
+          </label>
+          <div class="checklist-details">
+            <li>Generate a temporary access token for development testing.</li>
+            <li>Copy the <strong>Phone Number ID</strong> (e.g. <code>1091008534093606</code>).</li>
+            <li>Copy the <strong>WhatsApp Business Account ID</strong>.</li>
+          </div>
+          <label class="checklist-item" id="item-7">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Register your development test numbers in the "To" configuration section.</span>
+          </label>
+
+          <div class="checklist-title-bar"><i data-lucide="layout-template"></i> 3.3 — Create Message Template</div>
+          
+          <label class="checklist-item" id="item-8">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Access WhatsApp Manager → click <strong>Message templates</strong>.</span>
+          </label>
+          <label class="checklist-item" id="item-9">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Set category to <strong>Utility</strong> and template name to <code>perfectcollection_invoice</code>.</span>
+          </label>
+          <label class="checklist-item" id="item-10">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Set Header content type to <strong>Document</strong>.</span>
+          </label>
+          <label class="checklist-item" id="item-11">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Set Body text to: <code>Hello {{1}}, Your invoice for order {{2}} is attached. Thank you for shopping with us!</code></span>
+          </label>
+          <label class="checklist-item" id="item-12">
+            <input type="checkbox" class="setup-checkbox" onchange="updateProgress()">
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-label">Submit for Meta review and wait for the "Active" status approval (usually minutes).</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Section 4: NPM Packages -->
+      <section id="npm-packages">
+        <h2 class="section-title"><i data-lucide="box"></i> 4. NPM Packages Added</h2>
+        <p>Install the following node dependencies in your project directory:</p>
+        
+        <div class="code-container">
+          <div class="code-header-bar">
+            <span class="code-lang">Bash Shell</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+          </div>
+          <pre><code class="language-bash">npm install axios dotenv form-data pdfkit --save</code></pre>
+        </div>
+
+        <div class="table-container">
+          <table class="premium-table">
+            <thead>
+              <tr>
+                <th>Package Name</th>
+                <th>Version</th>
+                <th>Core Functionality</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>axios</strong></td>
+                <td><span class="version-badge">^1.15.0</span></td>
+                <td>HTTP Client — Performs network request dispatches to Meta's REST Graph endpoints.</td>
+              </tr>
+              <tr>
+                <td><strong>dotenv</strong></td>
+                <td><span class="version-badge">^17.4.2</span></td>
+                <td>Environment Variable Loader — Reads and injects keys from <code>.env</code> file into <code>process.env</code> securely.</td>
+              </tr>
+              <tr>
+                <td><strong>form-data</strong></td>
+                <td><span class="version-badge">^4.0.5</span></td>
+                <td>Multipart/form-data Assembler — Wraps buffers correctly to interface file upload systems.</td>
+              </tr>
+              <tr>
+                <td><strong>pdfkit</strong></td>
+                <td><span class="version-badge">^0.18.0</span></td>
+                <td>PDF Generator — Creates invoice structures from raw text and numbers directly in-memory.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout tip">
+          <i data-lucide="lightbulb"></i>
+          <div class="callout-content">
+            <p><strong>Design Decision:</strong> We use <code>pdfkit</code> to build PDFs directly on the server without loading full Chromium instances. This keeps the application extremely fast, lightweight, and easy to deploy on small hosting tiers.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: File-by-File Changes -->
+      <section id="file-changes">
+        <h2 class="section-title"><i data-lucide="file-diff"></i> 5. File-by-File Changes with Full Code</h2>
+        <p>Below is the complete catalog of changes made across 11 files in the application. Open each file to see details, file roles, and changes:</p>
+
+        <div class="accordion-list">
+          
+          <!-- File 1 -->
+          <div class="accordion-item" id="file-env">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-text" class="file-icon"></i>
+                <span class="file-name">.env</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge create">Create</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Stores environment variables locally. Ensure this file is never shared or committed.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">env</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-env"># MongoDB Atlas Connection
+MONGO_URI=mongodb+srv://paraskaushik12:databasepassword@cluster0.omsux.mongodb.net/perfectCollectionDb?retryWrites=true&w=majority&appName=Cluster0
+
+# WhatsApp Cloud API Configuration
+WHATSAPP_TOKEN=EAATDQJ22ZCsMBRLJF1NOP1fsaXBkDZBmqWwJndBiMpnQTmycayEgj7yQ3dQnlPZAxABHaxq6Q0VO2sSPOm93CAZAW3THhnZBTX5Q4U44iRk2hz0qjulzg3dFNw8V9rIZCPZB17lA1ZBLV4BnT2YLxgYXPZBksQx2VBlxYeqHiXOE6tZAGofArESHDCCDGySBmpRQZDZD
+WHATSAPP_PHONE_NUMBER_ID=1091008534093606
+GRAPH_API_VERSION=v25.0
+
+# Server Configuration
+PORT=8000</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 2 -->
+          <div class="accordion-item" id="file-gitignore">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">.gitignore</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Ensures node dependencies and environment files are not committed to git repositories.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">gitignore</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-diff">node_modules/
++.env</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 3 -->
+          <div class="accordion-item" id="file-pdfgen">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">services/pdfGenerator.js</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge create">Create</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Builds transaction bills to standard A4 PDF documents. Collects generated outputs directly into buffers.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">javascript</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-javascript">const PDFDocument = require("pdfkit");
+
+/**
+ * Generates a PDF buffer from transaction data.
+ * Returns a Promise that resolves to a Buffer containing the PDF bytes.
+ */
+function generateInvoicePdf(transaction) {
+  return new Promise((resolve, reject) => {
+    const doc = new PDFDocument({ margin: 40, size: "A4" });
+    const chunks = [];
+
+    doc.on("data", (chunk) => chunks.push(chunk));
+    doc.on("end", () => resolve(Buffer.concat(chunks)));
+    doc.on("error", reject);
+
+    // --- Header ---
+    doc.fontSize(20).font("Helvetica-Bold").text("Perfect Collection", { align: "center" });
+    doc.fontSize(10).font("Helvetica").text("(9899258797)", { align: "center" });
+    doc.fontSize(9).text("SC-190, Jaipuria Sunrise Plaza, Indirapuram, GIZB, UP", { align: "center" });
+    doc.moveDown();
+
+    // --- Invoice info ---
+    doc.fontSize(11).font("Helvetica-Bold").text(`Estimate No: ${transaction.transactionNumber}`);
+    doc.font("Helvetica").text(`Date: ${transaction.createdAt}`);
+    doc.text(`Payment: ${transaction.transactionType}`);
+    if (transaction.customerName) {
+      doc.text(`Customer: ${transaction.customerName}`);
+    }
+    doc.moveDown();
+
+    // --- Items table ---
+    doc.font("Helvetica-Bold");
+    const tableTop = doc.y;
+    doc.text("Item", 40, tableTop, { width: 150 });
+    doc.text("Price", 190, tableTop, { width: 80, align: "right" });
+    doc.text("Qty", 270, tableTop, { width: 60, align: "right" });
+    doc.text("Total", 330, tableTop, { width: 80, align: "right" });
+    doc.moveTo(40, doc.y + 2).lineTo(410, doc.y + 2).stroke();
+    doc.moveDown(0.5);
+
+    doc.font("Helvetica");
+    for (const item of transaction.purchases) {
+      const y = doc.y;
+      doc.text(item.itemName, 40, y, { width: 150 });
+      doc.text(String(item.itemPrice), 190, y, { width: 80, align: "right" });
+      doc.text(String(item.itemQuantity), 270, y, { width: 60, align: "right" });
+      doc.text(String(item.itemTotalPrice), 330, y, { width: 80, align: "right" });
+      doc.moveDown(0.3);
+    }
+
+    doc.moveTo(40, doc.y + 2).lineTo(410, doc.y + 2).stroke();
+    doc.moveDown();
+
+    // --- Totals ---
+    doc.font("Helvetica-Bold").fontSize(12);
+    doc.text(`Total Items: ${transaction.totalItems}`, { align: "right" });
+    doc.text(`Net Total: Rs.${transaction.netPrice}`, { align: "right" });
+    doc.moveDown(2);
+
+    // --- Footer ---
+    doc.fontSize(10).font("Helvetica").text("FIXED PRICE SHOP", { align: "center" });
+    doc.text("Thank you for your purchase!", { align: "center" });
+
+    doc.end();
+  });
+}
+
+module.exports = { generateInvoicePdf };</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 4 -->
+          <div class="accordion-item" id="file-wa-service">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">services/whatsapp.js</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge create">Create</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Handles connection formatting, media uploads, and message template requests to Meta API.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">javascript</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-javascript">const axios = require("axios");
+const FormData = require("form-data");
+
+const GRAPH_API_URL = "https://graph.facebook.com";
+
+/**
+ * Formats a phone number for WhatsApp API.
+ * - If 10 digits, prepends India country code 91
+ * - Strips any leading + or spaces
+ */
+function formatPhoneNumber(phone) {
+  var cleaned = phone.replace(/[\s\-\+]/g, "");
+  if (cleaned.length === 10) {
+    cleaned = "91" + cleaned;
+  }
+  return cleaned;
+}
+
+/**
+ * Uploads a PDF buffer to Meta's media API and returns the media ID.
+ */
+async function uploadPdf(pdfBuffer, filename) {
+  var version = process.env.GRAPH_API_VERSION || "v25.0";
+  var phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  var token = process.env.WHATSAPP_TOKEN;
+
+  var form = new FormData();
+  form.append("messaging_product", "whatsapp");
+  form.append("file", pdfBuffer, {
+    filename: filename,
+    contentType: "application/pdf",
+  });
+  form.append("type", "application/pdf");
+
+  var response = await axios.post(
+    `${GRAPH_API_URL}/${version}/${phoneNumberId}/media`,
+    form,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...form.getHeaders(),
+      },
+    }
+  );
+
+  return response.data.id;
+}
+
+/**
+ * Sends a PDF invoice to a WhatsApp number using the
+ * "perfectcollection_invoice" approved template.
+ */
+async function sendInvoice(phoneNumber, pdfBuffer, filename, customerName, invoiceNumber) {
+  var formattedPhone = formatPhoneNumber(phoneNumber);
+  var mediaId = await uploadPdf(pdfBuffer, filename);
+
+  var version = process.env.GRAPH_API_VERSION || "v25.0";
+  var phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  var token = process.env.WHATSAPP_TOKEN;
+
+  var response = await axios.post(
+    `${GRAPH_API_URL}/${version}/${phoneNumberId}/messages`,
+    {
+      messaging_product: "whatsapp",
+      to: formattedPhone,
+      type: "template",
+      template: {
+        name: "perfectcollection_invoice",
+        language: { code: "en_US" },
+        components: [
+          {
+            type: "header",
+            parameters: [
+              {
+                type: "document",
+                document: {
+                  id: mediaId,
+                  filename: filename,
+                },
+              },
+            ],
+          },
+          {
+            type: "body",
+            parameters: [
+              {
+                type: "text",
+                text: customerName || "Customer",
+              },
+              {
+                type: "text",
+                text: String(invoiceNumber || "N/A"),
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data;
+}
+
+module.exports = { sendInvoice, formatPhoneNumber };</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 5 -->
+          <div class="accordion-item" id="file-pkgjson">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-json" class="file-icon"></i>
+                <span class="file-name">package.json</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Declare newly integrated npm libraries within dependencies array.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">json</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-json">"dependencies": {
+  "axios": "^1.15.0",
+  "chart.js": "^3.7.1",
+  "dotenv": "^17.4.2",
+  "ejs": "^2.6.1",
+  "express": "^4.16.4",
+  "express-ejs-layouts": "^2.5.0",
+  "form-data": "^4.0.5",
+  "moment": "^2.29.1",
+  "mongodb": "^7.1.1",
+  "mongoose": "^5.4.6",
+  "nodemon": "^3.1.7",
+  "pdfkit": "^0.18.0"
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 6 -->
+          <div class="accordion-item" id="file-index">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">index.js</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Initializes configuration settings via dotenv at the absolute entry phase.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">javascript</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-javascript">// Load .env config values at first execution line
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 8000;
+
+app.use(express.json());
+const db = require("./config/mongoose");
+
+app.use(express.static("./assets"));
+app.use(express.static("./"));
+
+app.set("layout extractStyles", true);
+app.set("layout extractScripts", true);
+
+app.use(express.urlencoded({ extended: false }));
+app.use("/", require("./routes"));
+
+app.set("view engine", "ejs");
+app.set("views", "./views");
+
+app.listen(port, function (err) {
+  if (err) { console.log(`Error in running the server: ${err}`); }
+  console.log(`Server is running on port: ${port}`);
+});</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 7 -->
+          <div class="accordion-item" id="file-mongoose">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">config/mongoose.js</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Dynamic connection management leveraging environment configuration settings.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">javascript</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-javascript">const mongoose = require("mongoose");
+
+// Uses dynamic environment variable with a localized fallback route
+mongoose.connect(process.env.MONGO_URI || "mongodb://localhost/perfectCollectionDb");
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "Error connecting to MongoDB"));
+db.once("open", function () {
+  console.log("Connected to Database :: MongoDB");
+});
+
+module.exports = db;</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 8 -->
+          <div class="accordion-item" id="file-schema">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">models/transaction.js</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Modifies schema to track customer names and contact phone numbers directly.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">javascript</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-javascript">const mongoose = require("mongoose");
+
+const transactionSchema = new mongoose.Schema(
+  {
+    transactionNumber: {
+      type: Number,
+      required: true,
+    },
+    transactionName: {
+      type: String,
+    },
+    // New fields
+    customerName: {
+      type: String,
+    },
+    phoneNumber: {
+      type: String,
+    },
+    transactionType: {
+      type: String,
+    },
+    remarks: {
+      type: String,
+    },
+    shopname:{
+      type:String,
+    },
+    purchases: [
+      {
+        itemNumber: {
+          type: String,
+          required: true,
+        },
+        itemName: {
+          type: String,
+          required: true,
+        },
+        itemPrice: {
+          type: Number,
+          required: true,
+        },
+        itemQuantity: {
+          type: Number,
+          required: true,
+        },
+        itemTotalPrice: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    totalItems: {
+      type: Number,
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
+    gstAsPerfive: {
+      type: Number,
+    },
+    gstAsPertwel: {
+      type: Number,
+    },
+    netPrice: {
+      type: Number,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const Transaction = mongoose.model("Transaction", transactionSchema);
+module.exports = Transaction;</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 9 -->
+          <div class="accordion-item" id="file-controller">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">controllers/transaction_controller.js</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Uses modern async/await formatting. Hooks save events to the PDF generation and WhatsApp sending pipeline.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">javascript</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-javascript">const Transaction = require("../models/transaction");
+const { generateInvoicePdf } = require("../services/pdfGenerator");
+const { sendInvoice } = require("../services/whatsapp");
+var moment = require("moment");
+
+module.exports.create = async function (req, res) {
+  var x = req.body;
+  var myPurchases = [];
+  for (var i = 0; i < x.purchases.length; i++) {
+    var ob = {};
+    ob["itemNumber"] = x.purchases[i].itemNumber;
+    ob["itemName"] = x.purchases[i].itemName;
+    ob["itemPrice"] = x.purchases[i].itemPrice;
+    ob["itemQuantity"] = x.purchases[i].itemQuantity;
+    ob["itemTotalPrice"] = x.purchases[i].itemTotalPrice;
+    myPurchases.push(ob);
+  }
+
+  try {
+    var transaction = await Transaction.create({
+      transactionNumber: parseInt(x.transactionNumber),
+      transactionName: x.customerName || "TBD",
+      customerName: x.customerName || "",
+      phoneNumber: x.phoneNumber || "",
+      transactionType: x.transactionType,
+      remarks: x.remarks,
+      shopname: x.shopname,
+      purchases: myPurchases,
+      totalItems: parseInt(x.totalItems),
+      totalPrice: parseInt(x.totalPrice),
+      netPrice: parseInt(x.netPrice),
+      gstAsPerfive: x.gstAsPerfive ? parseFloat(x.gstAsPerfive) : 0,
+      gstAsPertwel: x.gstAsPertwel ? parseFloat(x.gstAsPertwel) : 0,
+      createdAt: moment(x.createdAt),
+    });
+
+    console.log("Transaction saved:", transaction.transactionNumber);
+
+    // --- WhatsApp Invoice Pipeline ---
+    var phoneNumber = x.phoneNumber;
+    var skipWhatsApp = !phoneNumber || phoneNumber.toUpperCase() === "NA" || phoneNumber.trim() === "";
+    var whatsappStatus = "skipped";
+
+    if (!skipWhatsApp) {
+      try {
+        var pdfBuffer = await generateInvoicePdf({
+          transactionNumber: transaction.transactionNumber,
+          createdAt: x.createdAt,
+          transactionType: x.transactionType,
+          customerName: x.customerName,
+          purchases: myPurchases,
+          totalItems: transaction.totalItems,
+          netPrice: transaction.netPrice,
+        });
+
+        var filename = "PerfectCollection_Invoice_" + transaction.transactionNumber + ".pdf";
+
+        await sendInvoice(phoneNumber, pdfBuffer, filename, x.customerName || "Customer", transaction.transactionNumber);
+        whatsappStatus = "sent";
+        console.log("WhatsApp invoice sent to " + phoneNumber);
+      } catch (waError) {
+        whatsappStatus = "failed";
+        console.error("WhatsApp dispatch error:", waError.response ? waError.response.data : waError.message);
+        // Best effort: Failure here does not block MongoDB save or printing.
+      }
+    }
+
+    return res.json({
+      success: true,
+      transactionId: transaction._id,
+      whatsappStatus: whatsappStatus,
+    });
+  } catch (err) {
+    console.log("Error in creating a transaction:", err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+};</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 10 -->
+          <div class="accordion-item" id="file-view">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">views/home.ejs</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Modifies layout templates to accept phone numbers and names, and adjusts page focus rules.
+                </div>
+                <div class="code-container">
+                  <div class="code-header-bar">
+                    <span class="code-lang">html</span>
+                    <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                  </div>
+                  <pre><code class="language-html">&lt;!-- Input group area --&gt;
+&lt;input type="tel" id="phone-input" class="phone-field" name="phone-input"
+       placeholder="Customer Phone (or NA to skip WhatsApp)"
+       autofocus required
+       style="height: 5rem; margin: 1rem; font-size: 1.5rem; border: 3px solid green; background: #e8f5e9;"
+       onkeyup="phoneFieldEnter(event)" /&gt;
+
+&lt;input type="text" id="wild-input" class="wild" name="wild-input"
+       style="height: 5rem; margin: 1rem; font-size: 1.3rem; border: 2px solid purple; background: #f3e5f5; color: black;"
+       placeholder="Customer Name" /&gt;
+
+&lt;input type="number" id="new-item-number" class="input-pair" name="itemNumber" 
+       placeholder="Enter Item Number" required style="height: 5 rem; margin: 1rem" 
+       onkeyup="additemNumberToListOnEnter(event)" /&gt;
+
+&lt;input type="number" id="new-item-price-input" class="input-pair" name="new-item-price-input"
+       placeholder="Enter Item Price" required style="height: 5 rem; margin: 1rem"
+       onkeyup="additemNumberToListOnEnter(event)" /&gt;
+
+&lt;input type="number" id="new-item-quantity-input" class="input-pair" name="new-item-quantity-input"
+       placeholder="Enter Item Quantity" required style="height: 5 rem; margin: 1rem"
+       onkeyup="additemNumberToListOnEnter(event)" /&gt;</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File 11 -->
+          <div class="accordion-item" id="file-assets-js">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div class="file-title-block">
+                <i data-lucide="file-code" class="file-icon"></i>
+                <span class="file-name">assets/js/pdf.js</span>
+              </div>
+              <div class="badge-container">
+                <span class="file-badge modify">Modify</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <div class="accordion-description">
+                  <strong>Why:</strong> Coordinates client billing validations, data packaging, post requests, and key navigate events.
+                </div>
+                
+                <div class="tabs-container">
+                  <div class="tabs-headers">
+                    <button class="tab-header active" onclick="switchTab(this, 'change-1')">1. Window Focus</button>
+                    <button class="tab-header" onclick="switchTab(this, 'change-2')">2. Bill validation</button>
+                    <button class="tab-header" onclick="switchTab(this, 'change-3')">3. Log responses</button>
+                    <button class="tab-header" onclick="switchTab(this, 'change-4')">4. Field navigation</button>
+                  </div>
+                  
+                  <div id="change-1" class="tab-content active">
+                    <p>Focuses cursor on the phone field during page startup:</p>
+                    <div class="code-container">
+                      <div class="code-header-bar">
+                        <span class="code-lang">javascript</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                      </div>
+                      <pre><code class="language-javascript">// Inside window.onload initialization
+document.getElementById("phone-input").focus();</code></pre>
+                    </div>
+                  </div>
+                  
+                  <div id="change-2" class="tab-content">
+                    <p>Enforces item validation and formats the checkout object data before sending:</p>
+                    <div class="code-container">
+                      <div class="code-header-bar">
+                        <span class="code-lang">javascript</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                      </div>
+                      <pre><code class="language-javascript">// Inside download click/SHIFT event listener
+var phoneNumber = document.getElementById("phone-input").value.trim();
+if (!phoneNumber) {
+  alert("Phone number is required. Enter a number or type NA to skip WhatsApp.");
+  window.location.reload();
+  return;
+}
+
+if (!completeTransactionJson["purchases"] || completeTransactionJson["purchases"].length === 0) {
+  alert("Add at least one item before billing.");
+  window.location.reload();
+  return;
+}
+
+completeTransactionJson["phoneNumber"] = phoneNumber;
+completeTransactionJson["customerName"] = document.getElementById("wild-input").value.trim();
+completeTransactionJson["remarks"] = document.getElementById("wild-input").value.trim();
+completeTransactionJson["shopname"] = localStorage.getItem("shopname");
+completeTransactionJson["createdAt"] = document.getElementById("page-date").value;</code></pre>
+                    </div>
+                  </div>
+
+                  <div id="change-3" class="tab-content">
+                    <p>Tracks and logs the delivery responses returned by servers:</p>
+                    <div class="code-container">
+                      <div class="code-header-bar">
+                        <span class="code-lang">javascript</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                      </div>
+                      <pre><code class="language-javascript">.then((data) => {
+  console.log("Success:", data);
+  if (data.whatsappStatus === "sent") {
+    console.log("Invoice sent to WhatsApp!");
+  } else if (data.whatsappStatus === "failed") {
+    console.log("WhatsApp sending failed — invoice was saved though.");
+  }
+})</code></pre>
+                    </div>
+                  </div>
+
+                  <div id="change-4" class="tab-content">
+                    <p>Handles enter keys to move focus between input fields:</p>
+                    <div class="code-container">
+                      <div class="code-header-bar">
+                        <span class="code-lang">javascript</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i data-lucide="copy"></i><span>Copy</span></button>
+                      </div>
+                      <pre><code class="language-javascript">function phoneFieldEnter(event) {
+  if (event.key === "Enter") {
+    var phoneVal = document.getElementById("phone-input").value.trim();
+    if (!phoneVal) {
+      alert("Phone number is required. Enter a number or type NA to skip WhatsApp.");
+      return;
+    }
+    document.getElementById("wild-input").focus();
+  }
+}
+
+// Modify wild-input enter event to focus item input
+document.getElementById("wild-input").addEventListener("keyup", (e) => {
+  e.preventDefault();
+  if (e.key === "Enter") {
+    document.getElementById("wild-input").disabled = true;
+    document.getElementById("new-item-number").focus();
+  }
+});</code></pre>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 6: Complete Flow -->
+      <section id="complete-flow">
+        <h2 class="section-title"><i data-lucide="git-commit"></i> 6. The Complete Flow — Client & Server Lifecycle</h2>
+        <p>
+          Below is the chronological path taken by code modules when a billing operation occurs:
+        </p>
+
+        <div class="timeline">
+          
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <div class="timeline-title-row">
+                <span class="timeline-step-num">Step 1</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Client browser</span>
+              </div>
+              <h4>Initialize Interface</h4>
+              <p>Shopkeeper navigates to checkout endpoint. Front-end focuses cursor on <code>#phone-input</code>.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <div class="timeline-title-row">
+                <span class="timeline-step-num">Step 2</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Client browser</span>
+              </div>
+              <h4>Input Information</h4>
+              <p>Shopkeeper enters phone → hits Enter → enters name → hits Enter → enters item details recursively.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <div class="timeline-title-row">
+                <span class="timeline-step-num">Step 3</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Client browser</span>
+              </div>
+              <h4>Trigger Billing</h4>
+              <p>Shopkeeper presses the <code>SHIFT</code> key, which runs validations, strips inputs, starts browser printing, and sends a JSON payload to the server.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node server-flow">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <div class="timeline-title-row">
+                <span class="timeline-step-num">Step 4</span>
+                <span style="font-size: 0.8rem; color: var(--accent-cyan);">Node.js Server</span>
+              </div>
+              <h4>Server Processing</h4>
+              <p>Server executes transaction logic in the backend:</p>
+              
+              <div class="server-flow-box">
+                <div class="server-step">
+                  <strong>Save DB:</strong> Saves billing record data in MongoDB with phone and customer details.
+                </div>
+                <div class="server-step">
+                  <strong>Skip Check:</strong> Evaluates if phone is "NA" or empty. If so, skips WhatsApp steps.
+                </div>
+                <div class="server-step">
+                  <strong>Build PDF:</strong> Calls <code>pdfGenerator</code> to create the A4 invoice buffer in-memory.
+                </div>
+                <div class="server-step">
+                  <strong>Upload to Meta:</strong> Sends the PDF buffer to Meta's media upload API to get a <code>media_id</code>.
+                </div>
+                <div class="server-step">
+                  <strong>Send Message:</strong> Calls Meta's message API to send the template message with the invoice PDF.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <div class="timeline-title-row">
+                <span class="timeline-step-num">Step 5</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Client browser</span>
+              </div>
+              <h4>Completion</h4>
+              <p>Client browser processes server response, logs the WhatsApp delivery state, and reloads the checkout page.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 7: Errors We Hit -->
+      <section id="errors-fixes">
+        <h2 class="section-title"><i data-lucide="bug"></i> 7. Errors We Hit and How We Fixed Them</h2>
+        <p>
+          Reference issues encountered during build testing and their fixes:
+        </p>
+
+        <div class="error-grid">
+          
+          <!-- Error 1 -->
+          <div class="error-card">
+            <h4><i data-lucide="alert-triangle"></i> Error 1: Parameter Mismatch</h4>
+            <div class="error-details">details: "body: number of localizable_params (1) does not match (2)"</div>
+            <div class="cause-block">
+              <strong>Cause:</strong> Message template expected both name and order number variables, but we only sent name.
+            </div>
+            <div class="fix-block">
+              <strong>Fix:</strong> Added the invoice ID parameter to the API request payload.
+            </div>
+          </div>
+
+          <!-- Error 2 -->
+          <div class="error-card">
+            <h4><i data-lucide="alert-triangle"></i> Error 2: Missing Button Param</h4>
+            <div class="error-details">details: "buttons: Button at index 0 of type Url requires a parameter"</div>
+            <div class="cause-block">
+              <strong>Cause:</strong> Template had a dynamic URL button but the request payload didn't include the button parameter.
+            </div>
+            <div class="fix-block">
+              <strong>Fix:</strong> Simplified the template in WhatsApp Manager to remove the dynamic URL button.
+            </div>
+          </div>
+
+          <!-- Error 3 -->
+          <div class="error-card">
+            <h4><i data-lucide="alert-triangle"></i> Error 3: Template Pending Review</h4>
+            <div class="error-details">details: "template name does not exist in en_US"</div>
+            <div class="cause-block">
+              <strong>Cause:</strong> Calling API with a template name that is still under review or disabled in Meta dashboard.
+            </div>
+            <div class="fix-block">
+              <strong>Fix:</strong> Wait for Meta template approval (typically takes 1-5 minutes).
+            </div>
+          </div>
+
+          <!-- Error 4 -->
+          <div class="error-card">
+            <h4><i data-lucide="alert-triangle"></i> Error 4: Expired Token</h4>
+            <div class="error-details">code: 190 (Authentication Error)</div>
+            <div class="cause-block">
+              <strong>Cause:</strong> Temporary developers console access tokens expire automatically in 24 hours.
+            </div>
+            <div class="fix-block">
+              <strong>Fix:</strong> Generate a new token, or configure a permanent System User Token.
+            </div>
+          </div>
+
+          <!-- Error 5 -->
+          <div class="error-card">
+            <h4><i data-lucide="alert-triangle"></i> Error 5: Total calculation is NaN</h4>
+            <div class="error-details">totalItems: NaN, totalPrice: NaN</div>
+            <div class="cause-block">
+              <strong>Cause:</strong> Billing was triggered with an empty shopping cart.
+            </div>
+            <div class="fix-block">
+              <strong>Fix:</strong> Added front-end validation check to ensure at least one item exists in checkout.
+            </div>
+          </div>
+
+          <!-- Error 6 -->
+          <div class="error-card">
+            <h4><i data-lucide="alert-triangle"></i> Error 6: DB Authorization Failure</h4>
+            <div class="error-details">AtlasError: "not authorized on admin to execute command"</div>
+            <div class="cause-block">
+              <strong>Cause:</strong> MongoDB connection string was missing the target database name, so it defaulted to admin database.
+            </div>
+            <div class="fix-block">
+              <strong>Fix:</strong> Explicitly add database routing path <code>/perfectCollectionDb</code> in <code>MONGO_URI</code>.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 8: Next Steps -->
+      <section id="next-steps">
+        <h2 class="section-title"><i data-lucide="rocket"></i> 8. Next Steps to Go to Production</h2>
+        <p>Follow these steps to move from local development testing to active production use:</p>
+
+        <div class="timeline">
+          
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <h4>8.1 — Get a Permanent System Access Token</h4>
+              <p>Temporary developers tokens expire after 24 hours. To generate a permanent token:</p>
+              <ol style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.9rem;">
+                <li>Go to Business Settings → <strong>System Users</strong>.</li>
+                <li>Add a user (e.g. <code>PerfectCollectionBot</code>) with <strong>Admin</strong> role.</li>
+                <li>Link the system user to your app asset and assign <strong>Full Control</strong> permissions.</li>
+                <li>Click <strong>Generate New Token</strong> and select <code>whatsapp_business_messaging</code>.</li>
+                <li>Save this token to <code>WHATSAPP_TOKEN</code> in your production environment settings.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <h4>8.2 — Register Your Production Phone Number</h4>
+              <p>Replace the default Meta sandbox test number with your business line:</p>
+              <ol style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.9rem;">
+                <li>Go to WhatsApp Manager → Phone Numbers → click <strong>Add Phone Number</strong>.</li>
+                <li>Enter your phone details and complete the OTP authentication call.</li>
+                <li>Verify your business settings on Meta Business Manager (requires document validation).</li>
+                <li>Update your environment configuration file with the new <code>WHATSAPP_PHONE_NUMBER_ID</code>.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <h4>8.3 — Verify Template Deploy Status</h4>
+              <p>Check the status of your message template (<code>perfectcollection_invoice</code>) in your Meta Business account to ensure it is marked as active before launching.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <h4>8.4 — Enable Unlimited Customer Delivery</h4>
+              <p>The Sandbox developer app can only deliver messages to pre-approved numbers. Once your production account is verified, you can send invoices to any customer phone number automatically.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <h4>8.5 — Understand Messaging Limits</h4>
+              <p>New business numbers have a starting limit of 1,000 outgoing conversations per day. Meta automatically increases this daily volume limit as you maintain good quality delivery ratings.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content-card">
+              <h4>8.6 — WhatsApp API Pricing</h4>
+              <p>Meta charges for conversations based on categories. In India, utility messages (like invoices) cost approximately <strong>₹0.35 per message</strong>. The first 1,000 service conversations are free each month.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 9: Reference Links -->
+      <section id="reference-links">
+        <h2 class="section-title"><i data-lucide="external-link"></i> 9. Reference Links</h2>
+        <p>Official API documentation and resources:</p>
+
+        <div class="reference-grid">
+          
+          <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/get-started" target="_blank" class="ref-card">
+            <div class="ref-title">WhatsApp Cloud API Getting Started</div>
+            <div class="ref-bottom">
+              <span class="ref-url">developers.facebook.com</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+          <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates" target="_blank" class="ref-card">
+            <div class="ref-title">Send Template Messages API Guide</div>
+            <div class="ref-bottom">
+              <span class="ref-url">developers.facebook.com</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+          <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/reference/media" target="_blank" class="ref-card">
+            <div class="ref-title">Media Upload Endpoint Reference</div>
+            <div class="ref-bottom">
+              <span class="ref-url">developers.facebook.com</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+          <a href="https://developers.facebook.com/docs/whatsapp/business-management-api/get-started#system-user-access-tokens" target="_blank" class="ref-card">
+            <div class="ref-title">System User Tokens Guide</div>
+            <div class="ref-bottom">
+              <span class="ref-url">developers.facebook.com</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+          <a href="https://developers.facebook.com/docs/whatsapp/pricing" target="_blank" class="ref-card">
+            <div class="ref-title">WhatsApp API Conversation Pricing</div>
+            <div class="ref-bottom">
+              <span class="ref-url">developers.facebook.com</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+          <a href="https://pdfkit.org/" target="_blank" class="ref-card">
+            <div class="ref-title">PDFKit Server-side Generation PDF</div>
+            <div class="ref-bottom">
+              <span class="ref-url">pdfkit.org</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+          <a href="https://axios-http.com/docs/intro" target="_blank" class="ref-card">
+            <div class="ref-title">Axios HTTP Client Guide</div>
+            <div class="ref-bottom">
+              <span class="ref-url">axios-http.com</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+          <a href="https://github.com/motdotla/dotenv" target="_blank" class="ref-card">
+            <div class="ref-title">Dotenv Configuration Handler</div>
+            <div class="ref-bottom">
+              <span class="ref-url">github.com/motdotla</span>
+              <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            </div>
+          </a>
+
+        </div>
+
+        <p style="text-align: center; margin-top: 4rem; font-size: 0.8rem; color: var(--text-muted);">
+          *This documentation was compiled on 19 April 2026 based on the active codebase modifications.*
+        </p>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Initialize Highlight.js code coloring
+    hljs.highlightAll();
+
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Navigation Active Link Highlighter on Scroll (Intersection Observer)
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.35
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+
+    // Code Accordions
+    function toggleAccordion(header) {
+      const item = header.parentElement;
+      const isOpen = item.classList.contains('open');
+
+      if (isOpen) {
+        item.classList.remove('open');
+      } else {
+        item.classList.add('open');
+      }
+    }
+
+    // Tabs inside accordions
+    function switchTab(button, tabId) {
+      const container = button.closest('.tabs-container');
+      
+      // Switch active tab header
+      container.querySelectorAll('.tab-header').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      button.classList.add('active');
+
+      // Switch active tab content
+      container.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      container.querySelector(`#${tabId}`).classList.add('active');
+    }
+
+    // Copy to Clipboard
+    function copyCode(button) {
+      const container = button.closest('.code-container');
+      const codeElement = container.querySelector('code');
+      const textToCopy = codeElement.textContent;
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const span = button.querySelector('span');
+        const originalText = span.textContent;
+        span.textContent = 'Copied!';
+        button.querySelector('i').setAttribute('data-lucide', 'check');
+        lucide.createIcons();
+
+        setTimeout(() => {
+          span.textContent = originalText;
+          button.querySelector('i').setAttribute('data-lucide', 'copy');
+          lucide.createIcons();
+        }, 2000);
+      }).catch(err => {
+        console.error('Clipboard copy failed: ', err);
+      });
+    }
+
+    // Setup Checklist State Persistence and Progress
+    const totalCheckboxes = document.querySelectorAll('.setup-checkbox').length;
+    
+    function loadChecklistState() {
+      document.querySelectorAll('.setup-checkbox').forEach((checkbox, index) => {
+        const state = localStorage.getItem(`pc_setup_chk_${index}`);
+        if (state === 'checked') {
+          checkbox.checked = true;
+          checkbox.closest('.checklist-item').classList.add('checked');
+        }
+      });
+      updateProgress(false); // Update UI without writing state recursively
+    }
+
+    function updateProgress(save = true) {
+      let checkedCount = 0;
+      document.querySelectorAll('.setup-checkbox').forEach((checkbox, index) => {
+        const item = checkbox.closest('.checklist-item');
+        if (checkbox.checked) {
+          checkedCount++;
+          item.classList.add('checked');
+          if (save) localStorage.setItem(`pc_setup_chk_${index}`, 'checked');
+        } else {
+          item.classList.remove('checked');
+          if (save) localStorage.removeItem(`pc_setup_chk_${index}`);
+        }
+      });
+
+      const percentage = totalCheckboxes > 0 ? Math.round((checkedCount / totalCheckboxes) * 100) : 0;
+      
+      const progressInner = document.getElementById('setup-progress');
+      const progressText = document.getElementById('setup-progress-text');
+      
+      progressInner.style.width = `${percentage}%`;
+      progressText.textContent = `${percentage}% Completed`;
+    }
+
+    // Load initial checklist status
+    window.addEventListener('DOMContentLoaded', () => {
+      loadChecklistState();
+    });
+
+    // Search/Filter guide
+    function searchGuide() {
+      const query = document.getElementById('sec-search').value.toLowerCase().trim();
+      const sections = document.querySelectorAll('section');
+
+      sections.forEach(section => {
+        const text = section.innerText.toLowerCase();
+        if (text.includes(query)) {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

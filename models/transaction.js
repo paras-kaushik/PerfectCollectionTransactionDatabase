@@ -7,14 +7,13 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    transactionName: {
-      // customer name if possible
+    customerName: {
+      type: String,
+    },
+    phoneNumber: {
       type: String,
     },
     transactionType: {
-      type: String,
-    },
-    remarks: {
       type: String,
     },
     shopname:{
