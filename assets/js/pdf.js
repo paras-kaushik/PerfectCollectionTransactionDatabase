@@ -191,13 +191,6 @@ window.onload = function () {
 			return;
 		}
 
-		var nameVal = document.getElementById("wild-input").value.trim();
-		if (!nameVal) {
-			alert("Customer Name is required.");
-			document.getElementById("wild-input").focus();
-			return;
-		}
-
 		// Must have at least one item
 		if (!completeTransactionJson["purchases"] || completeTransactionJson["purchases"].length === 0) {
 			alert("Add at least one item before billing.");
@@ -206,8 +199,8 @@ window.onload = function () {
 		}
 
 		completeTransactionJson["phoneNumber"] = phoneVal;
-		completeTransactionJson["customerName"] = nameVal;
-		completeTransactionJson["remarks"] = nameVal;
+		completeTransactionJson["customerName"] = "Customer";
+		completeTransactionJson["remarks"] = "Customer";
 		completeTransactionJson["shopname"] = "Perfect Collection";
 		completeTransactionJson["createdAt"] =
 			document.getElementById("page-date").value;
@@ -307,20 +300,8 @@ window.onload = function () {
 		this.value = this.value.replace(/[^0-9]/g, '');
 	});
 
-	document.getElementById("wild-input").addEventListener("keyup", (e) => {
-		if (e.key === "Enter") {
-			var nameInput = document.getElementById("wild-input");
-			var nameVal = nameInput.value.trim();
-			if (!nameVal) {
-				alert("Customer Name is required to proceed.");
-				nameInput.focus();
-				return;
-			}
-			document.getElementById("new-item-number").focus();
-		}
-	});
 };
-// When user presses Enter on the phone field, move focus to customer name
+// When user presses Enter on the phone field, move focus to item number input
 function phoneFieldEnter(event) {
 	if (event.key === "Enter") {
 		var phoneInput = document.getElementById("phone-input");
@@ -330,7 +311,7 @@ function phoneFieldEnter(event) {
 			phoneInput.focus();
 			return;
 		}
-		document.getElementById("wild-input").focus();
+		document.getElementById("new-item-number").focus();
 	}
 }
 
