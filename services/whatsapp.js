@@ -73,7 +73,7 @@ async function sendInvoice(phoneNumber, pdfBuffer, filename, customerName, invoi
       type: "template",
       template: {
         name: "perfectcollection_invoice",
-        language: { code: "en_US" },
+        language: { code: "en" },
         components: [
           {
             type: "header",
