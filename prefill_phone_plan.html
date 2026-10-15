@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Implementation Plan: Pre-fill Phone Number</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="assets/css/pandoc-light.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Implementation Plan: Pre-fill Phone Number</h1>
+</header>
+<h1
+id="implementation-plan-pre-fill-phone-number-to-9971313547">Implementation
+Plan: Pre-fill Phone Number to <code>9971313547</code></h1>
+<p><strong>Date</strong>: October 15, 2026<br />
+<strong>Goal</strong>: Pre-fill the Customer Phone input on the POS
+billing screen with the shop owner’s phone number
+<code>9971313547</code>, so the operator doesn’t need to type it every
+time (they can still overwrite it for different customers).</p>
+<hr />
+<h2 id="goal">1. Goal</h2>
+<p>The shop owner currently types <code>9971313547</code> (or the store
+contact <code>9899258797</code>) manually for most transactions. By
+pre-filling the phone input with <code>9971313547</code>, the operator
+can:</p>
+<ul>
+<li><strong>Skip phone entry entirely</strong> for routine/owner
+transactions (just press Enter).</li>
+<li><strong>Overwrite it</strong> by clearing the field and typing a
+different customer’s number when needed.</li>
+</ul>
+<p>This is a single-line change in the frontend — no backend
+modifications required.</p>
+<hr />
+<h2 id="affected-files">2. Affected Files</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" /><a
+href="file:///Users/paraskaushik/Developer/PerfectCollectionTransactionDatabase/views/home.ejs"><code>views/home.ejs</code></a>
+— Add <code>value="9971313547"</code> to the phone
+<code>&lt;input&gt;</code> element.</label></li>
+</ul>
+<p><strong>No other files are affected.</strong> The backend (<a
+href="file:///Users/paraskaushik/Developer/PerfectCollectionTransactionDatabase/controllers/transaction_controller.js"><code>controllers/transaction_controller.js</code></a>)
+already reads <code>x.phoneNumber</code> from the request body, and the
+client-side JavaScript (<a
+href="file:///Users/paraskaushik/Developer/PerfectCollectionTransactionDatabase/assets/js/pdf.js"><code>assets/js/pdf.js</code></a>)
+reads the phone input’s <code>.value</code> at billing time — both work
+identically whether the value was typed or pre-filled.</p>
+<hr />
+<h2 id="technical-education-how-html-value-attribute-works">3. Technical
+Education: How HTML <code>value</code> Attribute Works</h2>
+<h3 id="the-current-phone-input-line-60-63-of-home.ejs">The Current
+Phone Input (Line 60-63 of <code>home.ejs</code>)</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;tel&quot;</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;phone-input&quot;</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;phone-field&quot;</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;phone-input&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  placeholder</span><span class="op">=</span><span class="st">&quot;Customer Phone&quot;</span><span class="ot"> autofocus required maxlength</span><span class="op">=</span><span class="st">&quot;10&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ot">  style</span><span class="op">=</span><span class="st">&quot;height: 5rem; margin: 1rem; font-size: 1.5rem; border: 3px solid green; background: #e8f5e9;&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ot">  onkeyup</span><span class="op">=</span><span class="st">&quot;phoneFieldEnter(event)&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span></code></pre></div>
+<h4 id="key-attributes-explained">Key Attributes Explained:</h4>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Current Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type="tel"</code></td>
+<td><code>tel</code></td>
+<td>Tells browsers to show a telephone-optimized keyboard on mobile
+devices. Unlike <code>type="number"</code>, it allows leading zeros and
+doesn’t add spinners.</td>
+</tr>
+<tr>
+<td><code>placeholder="Customer Phone"</code></td>
+<td><code>Customer Phone</code></td>
+<td>Grey hint text shown <strong>only when the field is empty</strong>.
+Disappears the moment the user types or when a <code>value</code> is
+present.</td>
+</tr>
+<tr>
+<td><code>autofocus</code></td>
+<td><em>(boolean)</em></td>
+<td>Automatically places the cursor in this field when the page
+loads.</td>
+</tr>
+<tr>
+<td><code>maxlength="10"</code></td>
+<td><code>10</code></td>
+<td>Prevents typing more than 10 characters.</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><strong>Not set</strong></td>
+<td>The initial text content of the input. <strong>This is what we’re
+adding.</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-adding-value9971313547-does">What Adding
+<code>value="9971313547"</code> Does:</h3>
+<ol type="1">
+<li><strong>On page load</strong>: The input renders with
+<code>9971313547</code> already visible (replacing the grey placeholder
+text).</li>
+<li><strong>Cursor position</strong>: Because <code>autofocus</code> is
+set, the cursor lands in the field — the operator can immediately press
+Enter to accept the pre-filled number, or select-all and type a
+different number.</li>
+<li><strong>Validation</strong>: The existing
+<code>phoneFieldEnter()</code> function in <a
+href="file:///Users/paraskaushik/Developer/PerfectCollectionTransactionDatabase/assets/js/pdf.js#L305-L316"><code>pdf.js:305-316</code></a>
+checks <code>phoneVal.length !== 10</code>. Since
+<code>"9971313547"</code> is exactly 10 digits, it passes validation
+immediately.</li>
+<li><strong>Billing flow</strong>: At billing time (<a
+href="file:///Users/paraskaushik/Developer/PerfectCollectionTransactionDatabase/assets/js/pdf.js#L187"><code>pdf.js:187</code></a>),
+<code>document.getElementById("phone-input").value.trim()</code> reads
+whatever is currently in the field — whether pre-filled or overwritten —
+so the backend receives the correct number.</li>
+<li><strong>Digits-only sanitizer</strong>: The <code>input</code> event
+listener at <a
+href="file:///Users/paraskaushik/Developer/PerfectCollectionTransactionDatabase/assets/js/pdf.js#L299-L301"><code>pdf.js:299-301</code></a>
+strips non-digit characters on keyup. Since <code>"9971313547"</code> is
+pure digits, the sanitizer has no effect on the pre-filled value.</li>
+</ol>
+<hr />
+<h2 id="proposed-concrete-code-change">4. Proposed Concrete Code
+Change</h2>
+<h3 id="viewshome.ejs-line-60"><a
+href="file:///Users/paraskaushik/Developer/PerfectCollectionTransactionDatabase/views/home.ejs"><code>views/home.ejs</code></a>
+— Line 60</h3>
+<p><strong>Before:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;tel&quot;</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;phone-input&quot;</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;phone-field&quot;</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;phone-input&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  placeholder</span><span class="op">=</span><span class="st">&quot;Customer Phone&quot;</span><span class="ot"> autofocus required maxlength</span><span class="op">=</span><span class="st">&quot;10&quot;</span></span></code></pre></div>
+<p><strong>After:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">&quot;tel&quot;</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;phone-input&quot;</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;phone-field&quot;</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;phone-input&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  placeholder</span><span class="op">=</span><span class="st">&quot;Customer Phone&quot;</span><span class="ot"> value</span><span class="op">=</span><span class="st">&quot;9971313547&quot;</span><span class="ot"> autofocus required maxlength</span><span class="op">=</span><span class="st">&quot;10&quot;</span></span></code></pre></div>
+<p>This is a single attribute addition (<code>value="9971313547"</code>)
+on the existing <code>&lt;input&gt;</code> tag. Nothing else
+changes.</p>
+<hr />
+<h2 id="verification-plan">5. Verification Plan</h2>
+<ol type="1">
+<li><strong>The app is already running locally</strong> at <a
+href="http://localhost:8000">http://localhost:8000</a>.</li>
+<li>After the change is saved, reload the page in the browser.</li>
+<li><strong>Verify</strong>: The phone input field should show
+<code>9971313547</code> pre-filled (not greyed-out placeholder
+text).</li>
+<li><strong>Verify Enter flow</strong>: Press Enter — focus should jump
+to the Item Number field without an alert.</li>
+<li><strong>Verify overwrite</strong>: Clear the field, type a different
+10-digit number, press Enter — should work normally.</li>
+<li><strong>Verify billing</strong>: Add an item, press Shift (bill
+shortcut) — the transaction should save with the pre-filled (or
+overwritten) phone number.</li>
+</ol>
+</body>
+</html>
